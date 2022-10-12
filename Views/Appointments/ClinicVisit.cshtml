@@ -1,0 +1,155 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model WebApp.Models.BookingModel
+@{
+    ViewData["Title"] = "Book Appointment";
+}
+
+<h1>Book Appointment</h1>
+<hr/>
+
+<h3>Appointment Type</h3>
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="ClinicVisit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-6">
+                     <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CellNo" class="control-label"></label>
+                        <input asp-for="CellNo" class="form-control" />
+                        <span asp-validation-for="CellNo" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EmailAddress" class="control-label"></label>
+                        <input asp-for="EmailAddress" class="form-control" />
+                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Date" class="control-label">Date</label>
+                        <input asp-for="Date" type="text" id="Date" class="form-control" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+           
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                     </div>  
+
+                     <div class="form-group">
+                        <label asp-for="AlternateCell" class="control-label"></label>
+                        <input asp-for="AlternateCell" class="form-control" />
+                        <span asp-validation-for="AlternateCell" class="text-danger"></span>
+                     </div>
+
+                     <div class="form-group">
+                        <span class="text-danger"><br /><br /><br /></span>
+                     </div>
+
+                     <div class="form-group">
+                        <label asp-for="Time" required class="control-label"></label>
+                        @*<input asp-for="Time" class="form-control" />*@
+                        <select asp-for="Time" id="Time" class="form-control">
+                            <option value="">Select Time</option>
+                            <option value="08:00">08:00</option>
+                            <option value="09:00">09:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                        </select>
+                        <span asp-validation-for="Time" class="text-danger"></span>
+                     </div>
+
+                </div>
+                <div class="form-group">
+                <input type="submit" value="Submit Booking" class="btn btn-primary rounded-pill" />
+            </div>
+            </div>
+              @*<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js"></script>*@
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+      
+    
+        <script type="text/javascript">
+
+//$(function() {
+//    $('#Start').datepicker({
+//                    dateFormat: 'dd/mm/yyyy',
+//                    onSelect: function(date) {
+//                        var selectedDate = new Date(date);
+
+//                        $.ajax({
+//                            type: "GET",
+//                            url: "/Appointments/GetDateTimes",
+//                            contentType: "application/json",
+//                            dataType: "json",
+//                            success: function(response) {
+//                                alert("MVC Function Executed");
+//                            },
+//                            failure: function(response) {
+//                                alert("Execution Failed");
+//                            },
+//                            error: function(response) {
+//                                alert(response.responseText);
+//                            }
+//                        });
+//                    }
+//                });
+//});
+                $('#Date').datepicker({
+                    dateFormat: 'mm/dd/yy',
+                    onSelect: function(date) {
+                        var selectedDate = new Date(date).toJSON();
+
+                        let dropdown = $("#Time");
+                        dropdown.empty();
+
+                        dropdown.append("<option selected disabled>Choose Time</option>");
+                        dropdown.prop('selectedIndex', 0);
+
+                        $.ajax({
+                            type: "GET",
+                            url: "/Appointments/GetDateTimes",
+                            data:{ "fDate": date},
+                            contentType: "application/json",
+                            dataType: "json",
+                            success: function(response) {
+                                alert("MVC Function Executed");
+                                $.each(response, function(key, time) {
+                                    dropdown.append($("<option></option>").attr("value", time).text(time))
+                                })
+                            },
+                            failure: function(response) {
+                                alert("Execution Failed");
+                            },
+                            error: function(response) {
+                                alert(response.responseText);
+                            }
+                        });
+                    }
+                });
+    </script>
+}
