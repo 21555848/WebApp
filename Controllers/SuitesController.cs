@@ -10,97 +10,110 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
-    public class DoctorsController : Controller
+    public class SuitesController : Controller
     {
         private readonly WebAppContext _context;
 
-        public DoctorsController(WebAppContext context)
+        public SuitesController(WebAppContext context)
         {
             _context = context;
         }
 
-        // GET: Doctors
+        // GET: Suites
         public async Task<IActionResult> Index()
         {
-            var webAppContext = _context.Doctor.Include(d => d.Suite);
-            return View(await webAppContext.ToListAsync());
+              return View(await _context.Suite.ToListAsync());
         }
 
-        // GET: Doctors/Details/5
+        // GET: Suites/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Doctor == null)
+            if (id == null || _context.Suite == null)
             {
                 return NotFound();
             }
 
-            var doctor = await _context.Doctor
-                .Include(d => d.Suite)
+            var suite = await _context.Suite
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (doctor == null)
+            if (suite == null)
             {
                 return NotFound();
             }
 
-            return View(doctor);
+            return View(suite);
         }
 
-        // GET: Doctors/Create
+        // GET: Suites/Create
         public IActionResult Add()
         {
-            ViewData["SuiteId"] = new SelectList(_context.Suite.Where(d => d.Doctor == null), "Id", "Name");
             return View();
         }
 
-        // POST: Doctors/Create
+        public IActionResult AddForDoc()
+        {
+            return View("Add");
+        }
+
+        // POST: Suites/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("FirstName,LastName,SuiteId")] DoctorMaintenanceModel doctor)
+        public async Task<IActionResult> AddForDoc(SuiteMaintenanceModel suite, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                Doctor doc = new Doctor
+                Suite s = new Suite { Name = suite.SuiteName };
+                _context.Add(s);
+                await _context.SaveChangesAsync();
+                if (!string.IsNullOrEmpty(returnUrl))
                 {
-                    FirstName = doctor.FirstName,
-                    LastName = doctor.LastName,
-                    SuiteId = doctor.SuiteId
-                };
+                    return LocalRedirect(returnUrl);
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View("Add",suite);
+        }
 
-                _context.Add(doctor);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(SuiteMaintenanceModel suite)
+        {
+            if (ModelState.IsValid)
+            {
+                Suite s = new Suite { Name = suite.SuiteName };
+                _context.Add(s);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SuiteId"] = new SelectList(_context.Suite, "Id", "Id", doctor.SuiteId);
-            return View(doctor);
+            return View(suite);
         }
 
-        // GET: Doctors/Edit/5
+
+        // GET: Suites/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Doctor == null)
+            if (id == null || _context.Suite == null)
             {
                 return NotFound();
             }
 
-            var doctor = await _context.Doctor.FindAsync(id);
-            if (doctor == null)
+            var suite = await _context.Suite.FindAsync(id);
+            if (suite == null)
             {
                 return NotFound();
             }
-            ViewData["SuiteId"] = new SelectList(_context.Suite, "Id", "Id", doctor.SuiteId);
-            return View(doctor);
+            return View(suite);
         }
 
-        // POST: Doctors/Edit/5
+        // POST: Suites/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,SuiteId")] Doctor doctor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Suite suite)
         {
-            if (id != doctor.Id)
+            if (id != suite.Id)
             {
                 return NotFound();
             }
@@ -109,12 +122,12 @@ namespace WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(doctor);
+                    _context.Update(suite);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DoctorExists(doctor.Id))
+                    if (!SuiteExists(suite.Id))
                     {
                         return NotFound();
                     }
@@ -125,51 +138,49 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SuiteId"] = new SelectList(_context.Suite, "Id", "Id", doctor.SuiteId);
-            return View(doctor);
+            return View(suite);
         }
 
-        // GET: Doctors/Delete/5
+        // GET: Suites/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Doctor == null)
+            if (id == null || _context.Suite == null)
             {
                 return NotFound();
             }
 
-            var doctor = await _context.Doctor
-                .Include(d => d.Suite)
+            var suite = await _context.Suite
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (doctor == null)
+            if (suite == null)
             {
                 return NotFound();
             }
 
-            return View(doctor);
+            return View(suite);
         }
 
-        // POST: Doctors/Delete/5
+        // POST: Suites/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Doctor == null)
+            if (_context.Suite == null)
             {
-                return Problem("Entity set 'WebAppContext.Doctor'  is null.");
+                return Problem("Entity set 'WebAppContext.Suite'  is null.");
             }
-            var doctor = await _context.Doctor.FindAsync(id);
-            if (doctor != null)
+            var suite = await _context.Suite.FindAsync(id);
+            if (suite != null)
             {
-                _context.Doctor.Remove(doctor);
+                _context.Suite.Remove(suite);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DoctorExists(int id)
+        private bool SuiteExists(int id)
         {
-          return _context.Doctor.Any(e => e.Id == id);
+          return _context.Suite.Any(e => e.Id == id);
         }
     }
 }

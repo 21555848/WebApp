@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model WebApp.Models.Appointment
+@{
+    ViewData["Title"] = "My Appointment";
+}
+
+<h1>My Appointment</h1>
+<hr />
+ @{
+            if (Model.Approved)
+            {
+                <h4 class="text-success">Confirmed</h4>
+            }
+
+            else
+            {
+                <h4 class="text-danger">Not Confirmed</h4>
+            }
+        }
+
+<br>
+<p>Alternate Contact No: </p>
+
+<table>
+    <tr>
+        <td>Full Name</td>
+        <td> @Html.DisplayFor(model => model.FirstName) &nbsp; @Html.DisplayFor(model => model.LastName)</td>
+    </tr>
+
+    <tr>
+        <td>Contact No</td>
+        <td>@Html.DisplayFor(model => model.CellNo)</td>
+    </tr>
+    @{
+        if(Model.AlternateCell != null)
+        {
+         <tr>
+            <td>Alternate Contact No</td>
+            <td>@Html.DisplayFor(model => model.AlternateCell)</td>
+         </tr>
+        }        
+      }
+
+      <tr>
+          <td>Date & Time</td>
+          <td>@ViewBag.DateTime</td>
+      </tr>
+</table>

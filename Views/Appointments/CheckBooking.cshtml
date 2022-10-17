@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model WebApp.Models.MyBookingModel
+@{
+    ViewData["Title"] = "Find My Appointment";
+}
+
+
+<h1>Find My Booking</h1>
+<hr>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CheckBooking">
+            <div class="form-group">
+                <label asp-for="Reference" class="form-label"></label>
+                <input asp-for="Reference" class="form-control" />
+                <span asp-validation-for="Reference" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PIN" class="form-label"></label>
+                <input asp-for="PIN" class="form-control" />
+                <span asp-validation-for="PIN" class="text-danger"></span>
+            </div>
+
+            <input type="submit" name="Submit" class="btn btn-primary rounded-pill" />
+
+        </form>
+    </div>
+
+</div>

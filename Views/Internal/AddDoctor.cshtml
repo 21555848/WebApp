@@ -1,8 +1,8 @@
-﻿@model WebApp.Models.Doctor
+﻿@model WebApp.Models.DoctorMaintenanceModel
 
 @{
     ViewData["Title"] = "Add Doctor";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <h1>Create</h1>
@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Add">
+        <form asp-action="AddDoctor">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label">First Name</label>
@@ -24,9 +24,25 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SuiteId" class="control-label">Suite</label>
-                <select asp-for="SuiteId" class ="form-control" asp-items="ViewBag.SuiteId"></select>
+                <label asp-for="EmailAddress" class="control-label">Email Address</label>
+                <input asp-for="EmailAddress" class="form-control" />
+                <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="SuiteId" class="control-label">Suite</label>
+                <select asp-for="SuiteId" class ="form-control" asp-items="ViewBag.SuiteId">
+                    <option value="">Select Suite</option>
+                </select>
+            </div>
+            @{
+                if(ViewBag.Count == 0)
+                {   
+                    <span>
+                    <label class="text-danger">Please create a suite before a doctor can be added to the system</label>
+                    <a asp-controller="Suites" asp-action="AddForDoc" asp-route-returnUrl="@Context.Request.Path" class="btn btn-secondary" >Add Suite</a></span>
+
+                }
+            }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

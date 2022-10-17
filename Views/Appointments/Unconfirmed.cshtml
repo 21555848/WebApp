@@ -1,0 +1,133 @@
+﻿@model IEnumerable<WebApp.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Unconfirmed";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<h1>Unconfirmed</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CellNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AlternateCell)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PIN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PatientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CellNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlternateCell)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Approved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PIN)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PatientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doctor.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+*@
+<table>
+@{
+    foreach(var item in Model)
+    {
+            <tr>
+                <td>Full Name</td>
+                <td> @item.FirstName &nbsp; @item.LastName</td>
+            </tr>
+
+            <tr>
+                <td>Contact No</td>
+                <td>@item.CellNo</td>
+                <td><a asp-action="Confirm" asp-route-id="@item.Id" class="btn btn-primary">Confirm</a></td>
+            </tr>
+            if(item.AlternateCell != null)
+            {
+                 <tr>
+                    <td>Alternate Contact No</td>
+                    <td>@item.AlternateCell</td>
+                 </tr>
+            }        
+
+            <tr style="margin-bottom:5px">
+                 <td>Date & Time</td>
+                 <td>@item.Date.ToLongDateString()
+                 <br />--------------------------------------------------------</td>
+            </tr>
+    }
+}
+</table>

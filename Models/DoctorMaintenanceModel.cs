@@ -10,8 +10,12 @@ namespace WebApp.Models
         [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
-        [Required]
+       
         [Display(Name = "Suite")]
         public int SuiteId { get; set; }
+
+        [Required]
+        [Display(Name ="Email Address")]
+        public string EmailAddress { get; set; }
     }
 }

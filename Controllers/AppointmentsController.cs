@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using WebApp.Areas.Identity.Data;
 using WebApp.Data;
 using WebApp.Models;
 
@@ -14,10 +17,16 @@ namespace WebApp.Controllers
     public class AppointmentsController : Controller
     {
         private readonly WebAppContext _context;
+        private readonly UserManager<WebAppUser> _userManager;
+        private readonly SignInManager<WebAppUser> _signInManager;
 
-        public AppointmentsController(WebAppContext context)
+        public AppointmentsController(WebAppContext context,
+            UserManager<WebAppUser> userManager,
+            SignInManager<WebAppUser> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: Appointments
@@ -156,20 +165,20 @@ namespace WebApp.Controllers
             {
                 _context.Appointment.Remove(appointment);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool AppointmentExists(int id)
         {
-          return _context.Appointment.Any(e => e.Id == id);
+            return _context.Appointment.Any(e => e.Id == id);
         }
 
         //GET: Appointments/Book
         public IActionResult ClinicVisit()
         {
-            return View();
+            return View("Book");
         }
 
         //POST: Appointments/Book
@@ -194,9 +203,9 @@ namespace WebApp.Controllers
             {
                 _context.Add(ap);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                return View("MyAppointment", ap);
             }
-            return View();
+            return View("Book", bm);
         }
 
         public IActionResult CheckBooking()
@@ -255,50 +264,121 @@ namespace WebApp.Controllers
 
         }
 
-        public async Task<IActionResult> Confirm(int? id)
+        //public async Task<IActionResult> Confirm(int? id)
+        //{
+        //    if (id == null || _context == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var appointment = await _context.Appointment.FindAsync(id);
+        //    if (appointment == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (appointment.Approved)
+        //    {
+        //        return RedirectToAction(nameof(Update));
+        //    }
+
+        //    ViewData["NotConfirmed"] = "Appointment Not Yet Confirmed.";
+        //    ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "LastName");
+        //    return View(appointment);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Confirm(int id, Appointment appointment)
+        //{
+        //    if (id != appointment.Id)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid && appointment.DoctorId != null)
+        //    {
+        //        appointment.Approved = true;
+        //        //appointment.Date = GetAppointmentDate(id);
+        //        //appointment.Time = GetAppointmentTime(id);
+
+        //        try
+        //        {
+        //            _context.Update(appointment);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!AppointmentExists(appointment.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Unconfirmed));
+        //    }
+
+        //    ViewData["NotConfirmed"] = "Appointment Not Yet Confirmed.";
+        //    ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "LastName");
+        //    return View(appointment);
+        //}
+
+        public IActionResult Confirm(int? id)
         {
-            if (id == null || _context == null)
+            if(id == null || _context == null)
             {
                 return NotFound();
             }
 
-            var appointment = await _context.Appointment.FindAsync(id);
-            if (appointment == null)
+            var appointment = _context.Appointment.FindAsync(id).Result;
+            if(appointment == null)
             {
                 return NotFound();
             }
 
-            if (appointment.Approved)
+            BookingModel bm = new BookingModel
             {
-                return RedirectToAction(nameof(Update));
-            }
+                Id = appointment.Id,
+                FirstName = appointment.FirstName,
+                LastName = appointment.LastName,
+                CellNo = appointment.CellNo ,
+                AlternateCell = appointment.AlternateCell,
+                EmailAddress = appointment.EmailAddress,
+                Date = appointment.Date.ToDateTime(appointment.Time),
+                Time = appointment.Date.ToDateTime(appointment.Time)
+            };
 
             ViewData["NotConfirmed"] = "Appointment Not Yet Confirmed.";
             ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "LastName");
-            return View(appointment);
+            return View(bm);
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Confirm(int id, Appointment appointment)
+        public async Task<IActionResult> Confirm(int id, BookingModel bm)
         {
-            if (id != appointment.Id)
+            if (ModelState.IsValid && bm.DoctorId != null)
             {
-                return NotFound();
-            }
+                var ap = _context.Appointment.FindAsync(id).Result;
+                if (ap == null)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid && appointment.DoctorId != null)
-            {
-                appointment.Approved = true;
-
+                ap.DoctorId = bm.DoctorId;
+                ap.Approved = true;
                 try
                 {
-                    _context.Update(appointment);
+                    _context.Update(ap);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AppointmentExists(appointment.Id))
+                    if (!AppointmentExists(ap.Id))
                     {
                         return NotFound();
                     }
@@ -307,12 +387,12 @@ namespace WebApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Unconfirmed));
             }
 
             ViewData["NotConfirmed"] = "Appointment Not Yet Confirmed.";
             ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "LastName");
-            return View(appointment);
+            return View(bm);
         }
 
         [HttpGet]
@@ -338,7 +418,7 @@ namespace WebApp.Controllers
                 var ap = appointmentsOnDay.Where(c => c.Time == timeCounter).ToList();
                 //string SqlQuery = "SELECT * FROM Appointment WHERE Date LIKE" + dateOnly;
                 //var result = _context.Appointment.FromSqlRaw(SqlQuery).ToList();
-                if (ap.Count() <= numDoctors)
+                if (ap.Count() < numDoctors)
                     availableTimes.Add(timeCounter.ToString("HH:mm"));
 
                 timeCounter = timeCounter.AddHours(1);
@@ -347,5 +427,87 @@ namespace WebApp.Controllers
             return Json(availableTimes);
         }
 
+
+        public IActionResult OnlineConsultation()
+        {
+            var patientProfile = GetPatientProfile();
+            BookingModel model = new BookingModel
+            {
+                FirstName = patientProfile.FirstName,
+                LastName = patientProfile.LastName,
+                CellNo = patientProfile.CellNo,
+                AlternateCell = patientProfile.AlternateCell,
+                EmailAddress = patientProfile.EmailAddress
+            };
+
+            return View("Book", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OnlineConsultation(BookingModel appointment)
+        {
+            if (ModelState.IsValid)
+            {
+                Random rand = new Random();
+                int ranNum = rand.Next(1000, 9999);
+
+                Appointment ap = new Appointment
+                {
+                    FirstName = appointment.FirstName,
+                    LastName = appointment.LastName,
+                    CellNo = appointment.CellNo,
+                    AlternateCell = appointment.AlternateCell,
+                    EmailAddress = appointment.EmailAddress,
+                    Date = DateOnly.FromDateTime(appointment.Date),
+                    Time = TimeOnly.FromDateTime(appointment.Time),
+                    PIN = ranNum,
+                    Type = AppoitnmentType.OnlineConsultation,
+                    PatientId = GetPatientId()
+                };
+
+                _context.Add(ap);
+                await _context.SaveChangesAsync();
+                ViewData["DateTime"] = ap.Date.ToDateTime(ap.Time).ToString("dd MMMM yyyy HH:mm",
+                    CultureInfo.CreateSpecificCulture("en-US"));
+                return View("MyAppointment", ap);
+            }
+
+            return View("Book", appointment);
+        }
+
+        public async Task<IActionResult> Unconfirmed()
+        {
+            var appointments = _context.Appointment.Where(x => x.Approved == false);
+            return View(await appointments.ToListAsync());
+        }
+        public async Task<IActionResult> Confirmed()
+        {
+            var appointments = _context.Appointment.Where(x => x.Approved == true);
+            return View(await appointments.ToListAsync());
+        }
+
+        private PatientProfile GetPatientProfile()
+        {
+            var user = _userManager.FindByEmailAsync(_userManager.GetUserName(User)).Result;
+            PatientProfile? profile = _context.PatientProfile.FirstOrDefault(x => x.WebAppUserId == user.Id);
+
+            return profile;
+        }
+
+        private int GetPatientId()
+        {
+            return GetPatientProfile().Id;
+        }
+
+        //private async Task<DateOnly> GetAppointmentDate(int id)
+        //{
+        //    return _context.Appointment.FindAsync(id).Result.Date;
+        //}
+
+        //private TimeOnly GetAppointmentTime(int id)
+        //{
+        //    return _context.Appointment.Find(id).Time;
+        //}
     }
 }
