@@ -1,5 +1,9 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+}
+
+.custom-nav {
+    background-color: green;
 }
 
 @media (min-width: 768px) {
@@ -14,5 +18,12 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.menu-logo {
+    color: #000000 !important;
+    font-weight: 700;
+    font-size: calc(32*0.063rem);
 }
