@@ -176,9 +176,32 @@ namespace WebApp.Controllers
         }
 
         //GET: Appointments/Book
+        [AllowAnonymous]
         public IActionResult ClinicVisit()
         {
+            ViewData["AppointmentType"] = "Clinic Visit";
+            if (_signInManager.IsSignedIn(User))
+            {
+                if (CurrentUser != null)
+                {
+                    var patientProfile = GetPatientProfile();
+                    var user = CurrentUser();
+                    BookingModel model = new BookingModel
+                    {
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        CellNo = patientProfile.CellNo,
+                        AlternateCell = patientProfile.AlternateCell,
+                        EmailAddress = patientProfile.EmailAddress
+                    };
+
+                    return View("Book", model);
+                }
+            }
+
+
             return View("Book");
+
         }
 
         //POST: Appointments/Book
@@ -198,13 +221,29 @@ namespace WebApp.Controllers
             ap.Date = DateOnly.FromDateTime(bm.Date);
             ap.Time = TimeOnly.FromDateTime(bm.Time);
             ap.PIN = ranNum;
+            ap.Type = AppointmentType.ClinicVisit;
 
             if (ModelState.IsValid)
             {
                 _context.Add(ap);
                 await _context.SaveChangesAsync();
+                EmailConfig email = new EmailConfig();
+                string body = string.Empty;
+                using (var reader = new StreamReader(Path.GetFullPath("EmailTemplates/Appointment.html")))
+                {
+                    body = reader.ReadToEnd();
+                }
+
+                body = body.Replace("{AppointmentType}", "Clinic Visit");
+                body = body.Replace("{User}", ap.FirstName);
+                body = body.Replace("{Reference}", ap.Id.ToString());
+                body = body.Replace("{PIN}", ap.PIN.ToString());
+
+                email.SendEmail(ap.EmailAddress, "Clini Visit Appointment Details", body);
+
                 return View("MyAppointment", ap);
             }
+            ViewData["AppointmentType"] = "Clinic Visit";
             return View("Book", bm);
         }
 
@@ -328,15 +367,53 @@ namespace WebApp.Controllers
 
         public IActionResult Confirm(int? id)
         {
-            if(id == null || _context == null)
+            if (id == null || _context == null)
             {
                 return NotFound();
             }
 
             var appointment = _context.Appointment.FindAsync(id).Result;
-            if(appointment == null)
+            var doctors = _context.Doctor.Include(a => a.Appointments).Where(x => x.Active == true).ToList();
+            List<DoctorMaintenanceModel> docList = new List<DoctorMaintenanceModel>();
+           
+            if (appointment == null)
             {
                 return NotFound();
+            }
+
+            foreach (var doc in doctors)
+            {
+                var user = _userManager.FindByIdAsync(doc.WebAppUserId).Result;
+                if (doc.Appointments.Count > 0)
+                {
+                    foreach (Appointment app in doc.Appointments)
+                    {
+                        if (app.Date == appointment.Date)
+                        {
+                            if(app.Time != appointment.Time)
+                            {
+                                docList.Add(new DoctorMaintenanceModel
+                                {
+                                    DoctorId = doc.Id,
+                                    FirstName = user.FirstName,
+                                    LastName = user.LastName
+                                });
+                            }
+                        }
+                            
+                    }
+                }
+
+                else
+                {
+                    docList.Add(new DoctorMaintenanceModel
+                    {
+                        DoctorId = doc.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName
+                    });
+                }
+                
             }
 
             BookingModel bm = new BookingModel
@@ -344,15 +421,16 @@ namespace WebApp.Controllers
                 Id = appointment.Id,
                 FirstName = appointment.FirstName,
                 LastName = appointment.LastName,
-                CellNo = appointment.CellNo ,
+                CellNo = appointment.CellNo,
                 AlternateCell = appointment.AlternateCell,
                 EmailAddress = appointment.EmailAddress,
                 Date = appointment.Date.ToDateTime(appointment.Time),
                 Time = appointment.Date.ToDateTime(appointment.Time)
             };
 
+
             ViewData["NotConfirmed"] = "Appointment Not Yet Confirmed.";
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "LastName");
+            ViewData["DoctorId"] = new SelectList(docList, "DoctorId", "LastName");
             return View(bm);
 
         }
@@ -428,23 +506,26 @@ namespace WebApp.Controllers
         }
 
 
+        [Authorize(Roles ="Default")]
         public IActionResult OnlineConsultation()
         {
             var patientProfile = GetPatientProfile();
+            var user = CurrentUser();
             BookingModel model = new BookingModel
             {
-                FirstName = patientProfile.FirstName,
-                LastName = patientProfile.LastName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 CellNo = patientProfile.CellNo,
                 AlternateCell = patientProfile.AlternateCell,
                 EmailAddress = patientProfile.EmailAddress
             };
-
+            ViewData["AppointmentType"] = "Online Consultation";
             return View("Book", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Default")]
         public async Task<IActionResult> OnlineConsultation(BookingModel appointment)
         {
             if (ModelState.IsValid)
@@ -462,7 +543,7 @@ namespace WebApp.Controllers
                     Date = DateOnly.FromDateTime(appointment.Date),
                     Time = TimeOnly.FromDateTime(appointment.Time),
                     PIN = ranNum,
-                    Type = AppoitnmentType.OnlineConsultation,
+                    Type = AppointmentType.OnlineConsultation,
                     PatientId = GetPatientId()
                 };
 
@@ -473,6 +554,7 @@ namespace WebApp.Controllers
                 return View("MyAppointment", ap);
             }
 
+            ViewData["AppointmentType"] = "Online Consultation";
             return View("Book", appointment);
         }
 
@@ -483,18 +565,36 @@ namespace WebApp.Controllers
         }
         public async Task<IActionResult> Confirmed()
         {
-            var appointments = _context.Appointment.Where(x => x.Approved == true);
-            return View(await appointments.ToListAsync());
+            var appointments = _context.Appointment.Where(x => x.Approved == true).Include(x=>x.Doctor);
+            List<ConfirmedAppointmentViewModel> appointmentVM = new List<ConfirmedAppointmentViewModel>();
+            foreach(var appointment in appointments)
+            {
+                appointmentVM.Add(new ConfirmedAppointmentViewModel
+                {
+                    Id = appointment.Id,
+                    FirstName = appointment.FirstName,
+                    LastName = appointment.LastName,
+                    CellNo = appointment.CellNo,
+                    AlternateCell = appointment.AlternateCell,
+                    EmailAddress = appointment.EmailAddress,
+                    Date = appointment.Date,
+                    Time = appointment.Time,
+                    Doctor = _userManager.FindByIdAsync(appointment.Doctor.WebAppUserId).Result,
+                    Type = appointment.Type
+                });
+            }
+            return View(appointmentVM);
         }
 
         private PatientProfile GetPatientProfile()
         {
-            var user = _userManager.FindByEmailAsync(_userManager.GetUserName(User)).Result;
-            PatientProfile? profile = _context.PatientProfile.FirstOrDefault(x => x.WebAppUserId == user.Id);
-
-            return profile;
+            return _context.PatientProfile.FirstOrDefault(x => x.WebAppUserId == CurrentUser().Id);
         }
 
+        private WebAppUser CurrentUser()
+        {
+            return _userManager.FindByEmailAsync(_userManager.GetUserName(User)).Result;
+        }
         private int GetPatientId()
         {
             return GetPatientProfile().Id;

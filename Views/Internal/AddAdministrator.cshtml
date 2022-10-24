@@ -1,17 +1,16 @@
-﻿@model WebApp.Models.DoctorMaintenanceModel
-
+﻿@model WebApp.Models.AdministratorModel
 @{
-    ViewData["Title"] = "Add Doctor";
+    ViewData["Title"] = "Add Administrator";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
 <h1>Create</h1>
 
-<h4>Doctor</h4>
+<h4>Administrator</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddDoctor">
+        <form asp-action="AddAdministrator">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label">First Name</label>
@@ -29,23 +28,7 @@
                 <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SuiteId" class="control-label">Suite</label>
-                <select asp-for="SuiteId" class ="form-control" asp-items="ViewBag.SuiteId">
-                    <option value="">Select Suite</option>
-                </select>
-            </div>
-            @{
-                if(ViewBag.Count == 0)
-                {   
-                    <span>
-                    <label class="text-danger">Please create a suite before a doctor can be added to the system</label>
-                    <a asp-controller="Suites" asp-action="AddForDoc" asp-route-returnUrl="@Context.Request.Path" class="btn btn-secondary" >Add Suite</a></span>
-
-                }
-            }
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" /> | 
-                <a asp-action="Doctors" class="btn btn-danger">Cancel</a>
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>

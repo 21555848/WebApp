@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp.Data;
 
@@ -11,9 +12,10 @@ using WebApp.Data;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(WebAppContext))]
-    partial class WebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20221022112712_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,9 +234,11 @@ namespace WebApp.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -382,9 +386,6 @@ namespace WebApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
                     b.Property<int>("SuiteId")
                         .HasColumnType("int");
 
@@ -397,8 +398,7 @@ namespace WebApp.Migrations
                     b.HasIndex("SuiteId")
                         .IsUnique();
 
-                    b.HasIndex("WebAppUserId")
-                        .IsUnique();
+                    b.HasIndex("WebAppUserId");
 
                     b.ToTable("Doctor", "Identity");
                 });
@@ -633,8 +633,8 @@ namespace WebApp.Migrations
                         .IsRequired();
 
                     b.HasOne("WebApp.Areas.Identity.Data.WebAppUser", "User")
-                        .WithOne("Doctor")
-                        .HasForeignKey("WebApp.Models.Doctor", "WebAppUserId")
+                        .WithMany()
+                        .HasForeignKey("WebAppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -689,9 +689,8 @@ namespace WebApp.Migrations
 
             modelBuilder.Entity("WebApp.Areas.Identity.Data.WebAppUser", b =>
                 {
-                    b.Navigation("Doctor");
-
-                    b.Navigation("PatientProfile");
+                    b.Navigation("PatientProfile")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WebApp.Models.Doctor", b =>

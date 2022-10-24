@@ -12,8 +12,8 @@ using WebApp.Data;
 namespace WebApp.Migrations
 {
     [DbContext(typeof(WebAppContext))]
-    [Migration("20221011160649_InitiaCreate")]
-    partial class InitiaCreate
+    [Migration("20221022114234_AddDoctorToUser")]
+    partial class AddDoctorToUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -233,6 +233,14 @@ namespace WebApp.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -378,20 +386,19 @@ namespace WebApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("SuiteId")
                         .HasColumnType("int");
+
+                    b.Property<string>("WebAppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SuiteId")
+                        .IsUnique();
+
+                    b.HasIndex("WebAppUserId")
                         .IsUnique();
 
                     b.ToTable("Doctor", "Identity");
@@ -472,14 +479,6 @@ namespace WebApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -634,7 +633,15 @@ namespace WebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WebApp.Areas.Identity.Data.WebAppUser", "User")
+                        .WithOne("Doctor")
+                        .HasForeignKey("WebApp.Models.Doctor", "WebAppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Suite");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebApp.Models.MedicalAid", b =>
@@ -683,6 +690,9 @@ namespace WebApp.Migrations
 
             modelBuilder.Entity("WebApp.Areas.Identity.Data.WebAppUser", b =>
                 {
+                    b.Navigation("Doctor")
+                        .IsRequired();
+
                     b.Navigation("PatientProfile")
                         .IsRequired();
                 });

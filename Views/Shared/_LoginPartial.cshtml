@@ -4,7 +4,6 @@
 
 @inject SignInManager<WebAppUser> SignInManager
 @inject UserManager<WebAppUser> UserManager
-@inject WebAppContext context
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
@@ -12,7 +11,6 @@
         var user = UserManager.FindByNameAsync(UserManager.GetUserName(User)).Result;
         if (UserManager.IsInRoleAsync(user, "Default").Result)
         {
-            var patientProfile = context.PatientProfile.FirstOrDefault(x => x.WebAppUserId == user.Id);
 
             <li class="nav-item">
                <span class="material-symbols-outlined">person </span> <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @*@UserManager.GetUserName(User)*@ @patientProfile.FirstName!</a>

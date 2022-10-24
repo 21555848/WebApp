@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using WebApp.Areas.Identity.Data;
+using WebApp.Models;
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
@@ -21,12 +22,10 @@ namespace WebApp.Areas.Identity.Pages.Account
     public class ResendEmailConfirmationModel : PageModel
     {
         private readonly UserManager<WebAppUser> _userManager;
-        private readonly IEmailSender _emailSender;
 
-        public ResendEmailConfirmationModel(UserManager<WebAppUser> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<WebAppUser> userManager)
         {
             _userManager = userManager;
-            _emailSender = emailSender;
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace WebApp.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                ModelState.AddModelError(string.Empty, "No account exists for this email.");
                 return Page();
             }
 
@@ -77,13 +76,30 @@ namespace WebApp.Areas.Identity.Pages.Account
                 pageHandler: null,
                 values: new { userId = userId, code = code },
                 protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                Input.Email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            //await _emailSender.SendEmailAsync(
+            //    Input.Email,
+            //    "Confirm your email",
+            //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            string body = string.Empty;
+            EmailConfig email = new EmailConfig();
 
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+            using (StreamReader reader = new StreamReader(Path.GetFullPath("EmailTemplates/AccountConfirmation.html")))
+            {
+                body = reader.ReadToEnd();
+            }
+
+            body = body.Replace("{ConfirmationLink}", callbackUrl);
+            body = body.Replace("{UserName}", user.FirstName);
+
+            if (email.SendEmail(user.Email,"Dr Booking Account Confirmation", body))
+            {
+                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                return Page();
+            }
+
+            ModelState.AddModelError(string.Empty, "Verification email could not be sent. Please contact support on +27 71 903 3678.");
             return Page();
+
         }
     }
 }
