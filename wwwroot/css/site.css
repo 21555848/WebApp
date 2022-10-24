@@ -3,7 +3,7 @@ html {
 }
 
 .custom-nav {
-    background-color: green;
+    background-color: #2c2c37 !important;
 }
 
 @media (min-width: 768px) {
@@ -23,7 +23,92 @@ body {
 }
 
 .menu-logo {
-    color: #000000 !important;
+    color: #ffffff !important;
     font-weight: 700;
     font-size: calc(32*0.063rem);
+}
+
+.menu-item {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+.btn {
+    display: flex;
+    justify-content: center;
+    font-size: calc(16*0.063rem);
+    font-weight: 600;
+    padding: 10px 16px 10px 16px !important;
+    border-radius: 25px;
+    backface-visibility: hidden;
+}
+
+.btn:focus {
+  outline:none;
+}
+
+.btn--primary {
+    background-color: #665ec6;
+    color: #ffffff !important;
+}
+
+
+    .btn--primary:hover {
+        background-color: #ffffff;
+        color: #665ec6 !important;
+        border: 1px solid #665ec6;
+        transition: all 0.10s ease-out;
+    }
+
+.btn--secondary {
+    background-color: #ffffff;
+    color: #665ec6 !important;
+    border: 1px solid #665ec6;
+    margin-left: 20px;
+}
+    .btn--secondary:hover {
+        background-color: #665ec6;
+        color: #ffffff !important;
+        transition: all 0.10s ease-out;
+    }
+
+    .landing {
+        background-color: #ffffff;
+        border: 1px solid #665ec6;
+        border-radius: 15px;
+        margin: 0 auto;
+    }
+.landing-heading,
+.landing-copy {
+    color: #2c2c37 !important;
+    padding: 20px 10px 20px 30px;
+    text-align: left;
+    margin: 0;
+}
+    .landing-heading {
+        font-weight: 700;
+    }
+
+    .col-lg-6 .btn {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+.landing-section {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.landing-image {
+    display: block;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+.landing-container {
+    display: flex;
+}
+
+.register{
+    display:flex;
+    justify-content: center;
 }
