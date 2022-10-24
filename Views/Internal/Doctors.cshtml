@@ -1,0 +1,45 @@
+﻿@model IEnumerable<WebApp.Models.DoctorMaintenanceModel>
+@{
+    ViewData["Title"] = "Doctors";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<h3>Doctors</h3>
+
+<hr />
+<p><a asp-action="AddDoctor">Add Doctor</a></p>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Full Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Suite</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach(var doc in Model)
+            {
+                    <tr>
+                    <td>@doc.FirstName &nbsp; @doc.LastName </td>
+                    <td>@doc.EmailAddress</td>
+                    <td>@doc.SuiteName</td>
+                    @{
+                    if(doc.Active == true)
+                    {
+                                <td>Active</td>
+                                <td><a asp-action="DeactivateDoctor" class="btn btn-danger" asp-route-id="@doc.DoctorId">Deactivate</a></td>
+                    }
+                    else
+                    {
+                                <td>Inactive</td>
+                                <td><a asp-action="ActivateDoctor" class="btn btn-success" asp-route-id="@doc.DoctorId">Activate</a></td>
+                    }
+                    }
+                    
+                    </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -17,5 +17,9 @@ namespace WebApp.Models
         [Required]
         [Display(Name ="Email Address")]
         public string EmailAddress { get; set; }
+
+        public string? SuiteName { get; set; }
+        public int? DoctorId { get; set; }
+        public bool Active { get; set; }
     }
 }

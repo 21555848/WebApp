@@ -1,8 +1,14 @@
-﻿@model IEnumerable<WebApp.Models.Doctor>
+﻿@using Microsoft.AspNetCore.Identity
+@using WebApp.Areas.Identity.Data
+@using WebApp.Data
+
+@model IEnumerable<WebApp.Models.Doctor>
+@inject UserManager<WebAppUser> userManager
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    var user = userManager.FindByNameAsync(userManager.GetUserName(User)).Result;
 }
 
 <h1>Index</h1>
@@ -14,13 +20,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                First Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                Last Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Suite)
+                Suite
             </th>
             <th></th>
         </tr>
@@ -29,10 +35,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @user.FirstName
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @user.LastName
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Suite.Id)

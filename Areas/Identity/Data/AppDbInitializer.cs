@@ -33,6 +33,23 @@ namespace WebApp.Areas.Identity.Data
                     await userManager.AddToRoleAsync(defaultUser, "SuperUser");
                 }
             }
+
+            var adminUser = new WebAppUser
+            {
+                UserName = "administrator",
+                Email = "wandile1993@hotmail.com",
+                EmailConfirmed = true
+            };
+
+            if (userManager.Users.All(a => a.Id != adminUser.Id))
+            {
+                var user = await userManager.FindByEmailAsync(adminUser.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(adminUser, "MediDevs2022!");
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
+            }
         }
     }
 }

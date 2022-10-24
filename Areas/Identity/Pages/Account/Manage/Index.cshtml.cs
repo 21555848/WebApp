@@ -152,8 +152,10 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-                FirstName = profile.FirstName,
-                LastName = profile.LastName,
+               // FirstName = profile.FirstName,
+               // LastName = profile.LastName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 CellNo = profile.CellNo,
                 AlternateCell = profile.AlternateCell,
                 StreetAddress = patientAddress.StreetAddress,

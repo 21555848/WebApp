@@ -140,14 +140,16 @@ namespace WebApp.Areas.Identity.Pages.Account
             {
                 var userData = new PatientProfile 
                 { 
-                    FirstName = Input.FirstName,
-                    LastName = Input.LastName,
+                    //FirstName = Input.FirstName,
+                    //LastName = Input.LastName,
                     CellNo = Input.CellNo,
                     AlternateCell = Input.AlternateCell,
                     EmailAddress = Input.Email
                 };
                 
                 var user = CreateUser();
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -189,10 +191,22 @@ namespace WebApp.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    string body = string.Empty;
+                    EmailConfig email = new EmailConfig();
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    using (StreamReader reader = new StreamReader(Path.GetFullPath("EmailTemplates/AccountConfirmation.html")))
+                    {
+                        body = reader.ReadToEnd();
+                    }
+
+                    body = body.Replace("{ConfirmationLink}", callbackUrl);
+                    body = body.Replace("{UserName}", user.FirstName);
+
+
+                    if (_userManager.Options.SignIn.RequireConfirmedAccount &&
+                        email.SendEmail(user.Email, "Dr Booking Account Confirmation Email", body))
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }

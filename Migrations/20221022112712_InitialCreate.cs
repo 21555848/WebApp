@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApp.Migrations
 {
-    public partial class InitiaCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,8 @@ namespace WebApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -100,8 +102,6 @@ namespace WebApp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CellNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AlternateCell = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -247,13 +247,19 @@ namespace WebApp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SuiteId = table.Column<int>(type: "int", nullable: false)
+                    SuiteId = table.Column<int>(type: "int", nullable: false),
+                    WebAppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Doctor", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Doctor_AspNetUsers_WebAppUserId",
+                        column: x => x.WebAppUserId,
+                        principalSchema: "Identity",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Doctor_Suite_SuiteId",
                         column: x => x.SuiteId,
@@ -437,6 +443,12 @@ namespace WebApp.Migrations
                 table: "Doctor",
                 column: "SuiteId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Doctor_WebAppUserId",
+                schema: "Identity",
+                table: "Doctor",
+                column: "WebAppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicalAid_PatientProfileId",

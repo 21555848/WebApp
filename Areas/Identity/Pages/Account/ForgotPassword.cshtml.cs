@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using WebApp.Areas.Identity.Data;
+using WebApp.Models;
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
@@ -68,13 +69,22 @@ namespace WebApp.Areas.Identity.Pages.Account
                 var callbackUrl = Url.Page(
                     "/Account/ResetPassword",
                     pageHandler: null,
-                    values: new { area = "Identity", code },
+                    values: new { email = user.Email, area = "Identity", code },
                     protocol: Request.Scheme);
+                EmailConfig email = new EmailConfig();
+                string body = string.Empty;
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                using(var reader = new StreamReader(Path.GetFullPath("EmailTemplates/PasswordReset.html")))
+                {
+                    body = reader.ReadToEnd();
+                }
+                body = body.Replace("{User}", user.FirstName);
+                body = body.Replace("{PasswordResetLink}", callbackUrl);
+                email.SendEmail(user.Email, "Dr Booking Password Reset", body);
+                //await _emailSender.SendEmailAsync(
+                //    Input.Email,
+                //    "Reset Password",
+                //    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

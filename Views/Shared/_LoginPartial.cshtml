@@ -4,7 +4,6 @@
 
 @inject SignInManager<WebAppUser> SignInManager
 @inject UserManager<WebAppUser> UserManager
-@inject WebAppContext context
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
@@ -12,10 +11,9 @@
         var user = UserManager.FindByNameAsync(UserManager.GetUserName(User)).Result;
         if (UserManager.IsInRoleAsync(user, "Default").Result)
         {
-            var patientProfile = context.PatientProfile.FirstOrDefault(x => x.WebAppUserId == user.Id);
 
             <li class="nav-item">
-                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @*@UserManager.GetUserName(User)*@ @patientProfile.FirstName!</a>
+                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @user.FirstName!</a>
             </li>
             <li class="nav-item">
                 <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

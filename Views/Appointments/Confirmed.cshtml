@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApp.Models.Appointment>
+﻿@model IEnumerable<WebApp.Models.ConfirmedAppointmentViewModel>
 @{
     ViewData["Title"] = "Confirmed";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
@@ -9,8 +9,7 @@
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
     <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-today" type="button" role="tab" aria-controls="nav-today" aria-selected="true">Today</button>
     <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Next 7 Days</button>
-    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
-    <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false" disabled>Disabled</button>
+    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">This Month</button>
   </div>
 </nav>
 
@@ -24,7 +23,9 @@
                   <th scope="col">Cell No</th>
                   <th scope="col">Alternate Contact</th>
                   <th scope="col">Email Address</th>
-                  <th scope="col">Time</th>
+                  <th scope="col">Time</th> 
+                  <th scope="col">Doctor</th>
+                  <th scope="col">Type</th>
               </tr>
           </thead>
 
@@ -34,14 +35,31 @@
                     {
                         if(item.Date == System.DateOnly.FromDateTime(DateTime.Today))
                         {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>@item.FirstName &nbsp; @item.LastName</td>
-                                <td>@item.CellNo</td>
-                                <td>@item.AlternateCell</td>
-                                <td>@item.EmailAddress</td>
-                                <td>@item.Time</td>
-                            </tr>
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.FirstName &nbsp; @item.LastName</td>
+                                    <td>@item.CellNo</td>
+                                    <td>@item.AlternateCell</td>
+                                    <td>@item.EmailAddress</td>
+                                    <td>@item.Time</td>
+                                    <td>@item.Doctor.FirstName.Substring(0,1) &nbsp;@item.Doctor.LastName </td>
+                                @{
+                                    if (item.Type == AppointmentType.OnlineConsultation)
+                                    {
+                                        <td>Online Consultation</td>
+                                    }
+
+                                    else if(item.Type == AppointmentType.HomeCall)
+                                    {
+                                        <td>Home Call</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Clinic Visit</td>
+                                    }
+                                }
+                                    
+                                </tr>
                         }
                         
                     }
@@ -61,6 +79,8 @@
                   <th scope="col">Email Address</th>
                   <th scope="col">Date</th>
                   <th scope="col">Time</th>
+                  <th scope="col">Doctor</th>
+                  <th scope="col">Type</th>
               </tr>
           </thead>
 
@@ -70,15 +90,31 @@
                     {
                         if(item.Date >= System.DateOnly.FromDateTime(DateTime.Today) && item.Date < System.DateOnly.FromDateTime(DateTime.Today.AddDays(7)))
                         {
-                            <tr>
-                                <td>@item.Id</td>
-                                <td>@item.FirstName &nbsp; @item.LastName</td>
-                                <td>@item.CellNo</td>
-                                <td>@item.AlternateCell</td>
-                                <td>@item.EmailAddress</td>
-                                <td>@item.Date.ToLongDateString()</td>
-                                <td>@item.Time</td>
-                            </tr>
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.FirstName &nbsp; @item.LastName</td>
+                                    <td>@item.CellNo</td>
+                                    <td>@item.AlternateCell</td>
+                                    <td>@item.EmailAddress</td>
+                                    <td>@item.Date.ToLongDateString()</td>
+                                    <td>@item.Time</td>
+                                    <td>@item.Doctor.FirstName.Substring(0,1) &nbsp;@item.Doctor.LastName </td>
+                                @{
+                                    if (item.Type == AppointmentType.OnlineConsultation)
+                                    {
+                                        <td>Online Consultation</td>
+                                    }
+
+                                    else if(item.Type == AppointmentType.HomeCall)
+                                    {
+                                        <td>Home Call</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Clinic Visit</td>
+                                    }
+                                }
+                                </tr>
                         }
                         
                     }
@@ -87,6 +123,59 @@
 
       </table>
   </div>
-  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">...</div>
-  <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
+  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+      <table class="table">
+          <thead>
+              <tr>
+                  <th scope="col">Ref #</th>
+                  <th scope="col">Full Name</th>
+                  <th scope="col">Cell No</th>
+                  <th scope="col">Alternate Contact</th>
+                  <th scope="col">Email Address</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Time</th>
+                  <th scope="col">Doctor</th>
+                  <th scope="col">Type</th>
+              </tr>
+          </thead>
+
+          <tbody>
+                @{
+                    foreach(var item in Model)
+                    {
+                        if(item.Date.Month == DateTime.Now.Month)
+                        {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.FirstName &nbsp; @item.LastName</td>
+                                    <td>@item.CellNo</td>
+                                    <td>@item.AlternateCell</td>
+                                    <td>@item.EmailAddress</td>
+                                    <td>@item.Date.ToLongDateString()</td>
+                                    <td>@item.Time</td>
+                                    <td>@item.Doctor.FirstName.Substring(0,1) &nbsp;@item.Doctor.LastName </td>
+                                @{
+                                    if (item.Type == AppointmentType.OnlineConsultation)
+                                    {
+                                        <td>Online Consultation</td>
+                                    }
+
+                                    else if(item.Type == AppointmentType.HomeCall)
+                                    {
+                                        <td>Home Call</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Clinic Visit</td>
+                                    }
+                                }
+                                </tr>
+                        }
+                        
+                    }
+                }
+          </tbody>
+
+      </table>
+  </div>
 </div>
