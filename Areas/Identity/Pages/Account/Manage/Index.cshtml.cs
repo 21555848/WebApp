@@ -101,7 +101,7 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
-            PatientProfile profile = _context.PatientProfile.FirstOrDefault(x => x.WebAppUserId == userId);
+            var profile = _context.PatientProfile.FirstOrDefault(x => x.WebAppUserId == userId);
 
             var patientAddress = _context.PatientAddress.FirstOrDefault(x => x.PatientProfileId == profile.Id);
             var creditCardInfo = _context.CreditCard.FirstOrDefault(x => x.PatientProfileId == profile.Id);

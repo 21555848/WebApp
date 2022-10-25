@@ -2,53 +2,107 @@
 @using WebApp.Areas.Identity.Data
 @using WebApp.Data
 
-@model IEnumerable<WebApp.Models.Doctor>
-@inject UserManager<WebAppUser> userManager
+@*@model IEnumerable<PatientListViewModel>*@
+    
+@model IEnumerable<PatientProfile>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Patients";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
-    var user = userManager.FindByNameAsync(userManager.GetUserName(User)).Result;
+}
+<style>
+    #searchText {
+  background-image: url('/css/searchicon.png'); /* Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
 }
 
-<h1>Index</h1>
+#myTable {
+  border-collapse: collapse; /* Collapse borders */
+  width: 100%; /* Full-width */
+  border: 1px solid #ddd; /* Add a grey border */
+  font-size: 18px; /* Increase font-size */
+}
+
+#myTable th, #myTable td {
+  text-align: left; /* Left-align text */
+  padding: 12px; /* Add padding */
+}
+
+#myTable tr {
+  /* Add a bottom border to all table rows */
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  /* Add a grey background color to the table header and on hover */
+  background-color: #f1f1f1;
+}
+</style>
+
+<h1>Patient List</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
+<input type="text" id="searchText" onkeyup="searchTable()" placeholder="Search" />
+<table class="table" id="myTable">
+        <tr class="header">
+            <th scope="col">
                 First Name
             </th>
-            <th>
+            <th scope="col">
                 Last Name
             </th>
-            <th>
-                Suite
+            <th scope="col">
+                Contact #
             </th>
-            <th></th>
+            <th scope="col">
+                Email Address
+            </th>
+            <th scope="col">
+                Alternate Contact
+            </th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @user.FirstName
-            </td>
-            <td>
-                @user.LastName
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Suite.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+        @foreach(var patient in Model)
+        {
+            <tr>
+                <td>@patient.WebAppUser.FirstName</td>
+                <td>@patient.WebAppUser.LastName</td>
+                <td>@patient.CellNo</td>
+                <td>@patient.EmailAddress</td>
+                <td>@patient.AlternateCell</td>
+            </tr>
+        }
 </table>
+@section Scripts{
+    <script type="text/javascript">
+    function searchTable() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("searchText");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+}

@@ -143,7 +143,7 @@
                 @{
                     foreach(var item in Model)
                     {
-                        if(item.Date.Month == DateTime.Now.Month)
+                        if(item.Date.Month == DateTime.Now.Month && item.Date > DateOnly.FromDateTime(DateTime.Today))
                         {
                                 <tr>
                                     <td>@item.Id</td>

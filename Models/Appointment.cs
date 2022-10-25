@@ -28,7 +28,10 @@ namespace WebApp.Models
         public Doctor ?Doctor { get; set; }
 
         public AppointmentType Type { get; set; }
-
+        public string? StreetAddress { get; set; }
+        public string? Address2 { get; set; }
+        public string? Suburb { get; set; }
+        public string? Province { get; set; }
 
     }
 

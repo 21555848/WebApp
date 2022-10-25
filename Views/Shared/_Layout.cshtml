@@ -1,4 +1,8 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@using WebApp.Areas.Identity.Data
+@using WebApp.Data
+
+@inject SignInManager<WebAppUser> SignInManager
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +10,7 @@
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApp</title>
+    <title>@ViewData["Title"] - Dr Booking</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/custom.scss"  asp-append-version="true"/>
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.11.0/build/cssnormalize/cssnormalize-min.css">
@@ -33,11 +37,30 @@
                             <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="ClinicVisit">Clinic Visit</a>
                         </li>
+                        @{
+                            if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="OnlineConsultation">Online Consultation</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="HomeCall">Home Call</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="MyAppointments">My Appointments</a>
+                                </li>
+
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="CheckBooking">Check Appointment</a>
+                                </li>
+                            }
+                        }
+                        
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
