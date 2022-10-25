@@ -2,3 +2,7 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+window.onload = () => {
+    document.body.style.backgroundColor = "#23242f";
+}
