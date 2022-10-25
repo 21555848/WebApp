@@ -25,26 +25,26 @@
 
 <table>
     <tr>
-        <td>Full Name</td>
+        <td>Full Name:</td>
         <td> @Html.DisplayFor(model => model.FirstName) &nbsp; @Html.DisplayFor(model => model.LastName)</td>
     </tr>
 
     <tr>
-        <td>Contact No</td>
+        <td>Contact No:</td>
         <td>@Html.DisplayFor(model => model.CellNo)</td>
     </tr>
     @{
         if(Model.AlternateCell != null)
         {
          <tr>
-            <td>Alternate Contact No</td>
+            <td>Alternate Contact No:</td>
             <td>@Html.DisplayFor(model => model.AlternateCell)</td>
          </tr>
         }        
       }
 
       <tr>
-          <td>Date & Time</td>
+          <td>Date & Time:</td>
           <td>@ViewBag.DateTime</td>
       </tr>
 </table>

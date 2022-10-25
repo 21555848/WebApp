@@ -31,8 +31,11 @@ namespace WebApp.Controllers
         // GET: Doctors
         public async Task<IActionResult> Index()
         {
-            var webAppContext = _context.Doctor.Include(d => d.Suite);
-            return View(await webAppContext.ToListAsync());
+            // List<PatientListViewModel> patients = new List<PatientListViewModel>();
+            // var webAppContext = _userManager.Users.Where(p => p.PatientProfile != null).ToList();
+            var profiles = _context.PatientProfile.Include(x => x.WebAppUser);
+            
+            return View(await profiles.ToListAsync());
         }
 
         // GET: Doctors/Details/5
@@ -180,7 +183,7 @@ namespace WebApp.Controllers
                    
                     email.SendEmail(adminUser.Email, "New Admin User Credentials", body);   
 
-                    return RedirectToAction(nameof(Administrators));
+                    return RedirectToAction(nameof(SystemUsers));
                 }
                 else
                 {
@@ -209,7 +212,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["SuiteId"] = new SelectList(_context.Suite, "Id", "Id", doctor.SuiteId);
+            ViewData["SuiteId"] = new SelectList(_context.Suite, "Id", "Name", doctor.SuiteId);
             return View(doctor);
         }
 

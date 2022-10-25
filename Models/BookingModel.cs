@@ -43,5 +43,25 @@ namespace WebApp.Models
         [DataType(DataType.Time)]
         public DateTime Time { get; set; }
 
+        [Display(Name ="Street Address")]
+        public string? StreetAddress { get; set; }
+        [Display(Name ="Unit Number & Complex")]
+        public string? Address2 { get; set; }
+        public string? Suburb { get; set; }
+        public string? Province { get; set; }
+        [Display(Name ="Postal Code")]
+        public string? PostalCode { get; set; }
+        public bool UseDifferentAddress { get; set; }
+        [Display(Name = "Street Address")]
+        public string? altStreetAddress { get; set; }
+        [Display(Name = "Unit Number & Complex")]
+        public string? altAddress2 { get; set; }
+        [Display(Name ="Suburb")]
+        public string? altSuburb { get; set; }
+        [Display(Name ="Province")]
+        public string? altProvince { get; set; }
+        [Display(Name = "Postal Code")]
+        public string? altPostalCode { get; set; }
+
     }
 }
