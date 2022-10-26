@@ -75,40 +75,106 @@ body {
         background-color: #ffffff;
         border: 1px solid #665ec6;
         border-radius: 15px;
-        margin: 0 auto;
+        margin-right: 20px;
     }
+
+.landing:last-child {
+    margin-right: unset;
+}
+
 .landing-heading,
 .landing-copy {
     color: #2c2c37 !important;
-    padding: 20px 10px 20px 30px;
+    padding: 20px 10px 20px 15px;
     text-align: left;
     margin: 0;
 }
-    .landing-heading {
-        font-weight: 700;
-    }
+.landing-copy {
+    font-size: calc(14*0.063rem);
+    padding: 0 10px 20px 15px;
+}
+.landing-heading {
+    font-weight: 700;
+    font-size: calc(24*0.063rem);
+}
 
-    .col-lg-6 .btn {
-        margin-left: 30px;
-        margin-right: 30px;
-    }
+.col-md-6 .btn {
+    margin-left: 15px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    padding: 10px 10px 10px 10px !important;
+}
 
 .landing-section {
     margin-top: 100px;
     margin-bottom: 100px;
+    display: flex;
+}
+.image {
+    background-repeat:no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
 }
 
 .landing-image {
-    display: block;
-    border-bottom-left-radius: 15px;
-    border-top-left-radius: 15px;
+    background-image: url("../assets/images/landing-photo.jpg");
+}
+
+
+.landing-image--two {
+    background-image: url("../assets/images/landing-two.jpg");
+}
+
+
+.landing-image--three {
+    background-image: url("../assets/images/landing-three.jpg");
 }
 
 .landing-container {
     display: flex;
 }
 
-.register{
-    display:flex;
+.register,
+.login,
+.forgot{
+    display: flex;
     justify-content: center;
+    background-color: #ffffff;
+    width: 50%;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
+
+.heading {
+    color: #665ec6 !important;
+    font-weight: 700;
+    font-size: calc(26*0.063rem);
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.register-input,
+.login-input,
+.forgot-input {
+    border: 1px solid #665ec6;
+    margin-bottom: 20px;
+}
+
+#registerForm .btn ,
+#account .btn
+#forgotPassword .btn {
+    margin-bottom: 20px;
+}
+
+.form-link {
+    color: #2c2c37 !important;
+    font-size: calc(14*0.063rem);
+}
+
+    .form-link:hover {
+        color: #665ec6 !important;
+    }

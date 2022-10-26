@@ -7,47 +7,47 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="register">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
+            <h2 class="heading">Create a new account.</h2>
+            
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
-                <input asp-for="Input.FirstName" class="form-control" aria-required="true" />
+                <input asp-for="Input.FirstName" class="form-control register-input" aria-required="true" />
                 <label asp-for="Input.FirstName"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.LastName" class="form-control" aria-required="true" />
+                <input asp-for="Input.LastName" class="form-control register-input" aria-required="true" />
                 <label asp-for="Input.LastName"></label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.CellNo" class="form-control" aria-required="true" />
+                <input asp-for="Input.CellNo" class="form-control register-input" aria-required="true" />
                 <label asp-for="Input.CellNo"></label>
                 <span asp-validation-for="Input.CellNo" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.AlternateCell" class="form-control" autocomplete="username" aria-required="true" />
+                <input asp-for="Input.AlternateCell" class="form-control register-input" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.AlternateCell"></label>
                 <span asp-validation-for="Input.AlternateCell" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                <input asp-for="Input.Email" class="form-control register-input" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.Email"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                <input asp-for="Input.Password" class="form-control register-input" autocomplete="new-password" aria-required="true" />
                 <label asp-for="Input.Password"></label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                <input asp-for="Input.ConfirmPassword" class="form-control register-input" autocomplete="new-password" aria-required="true" />
                 <label asp-for="Input.ConfirmPassword"></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn--primary">Register</button>
         </form>
     </div>
    @* <div class="col-md-6 col-md-offset-2">
