@@ -472,7 +472,7 @@ namespace WebApp.Controllers
         //    ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "LastName");
         //    return View(appointment);
         //}
-        [Authorize(Roles = "Administrator,SuperUser")]
+        [Authorize(Roles = "Admin,SuperUser")]
         public IActionResult Confirm(int? id)
         {
             if (id == null || _context == null)
@@ -554,7 +554,7 @@ namespace WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator,SuperUser")]
+        [Authorize(Roles = "Admin,SuperUser")]
         public async Task<IActionResult> Confirm(int id, BookingModel bm)
         {
             if (ModelState.IsValid && bm.DoctorId != null)
@@ -609,6 +609,12 @@ namespace WebApp.Controllers
             TimeOnly timeCounter = new TimeOnly(08, 00, 00);
 
             TimeOnly timeLimit = new TimeOnly(16, 00, 00);
+
+            if(fDate < DateTime.Today)
+            {
+                availableTimes.Add("Selected Date In Past");
+                return Json(availableTimes);
+            }
 
             while (timeCounter <= timeLimit)
             {
@@ -677,7 +683,7 @@ namespace WebApp.Controllers
             return View("Book", appointment);
         }
 
-        [Authorize(Roles = "Administrator,SuperUser")]
+        [Authorize(Roles = "Admin,SuperUser")]
         public async Task<IActionResult> Unconfirmed()
         {
             var appointments = _context.Appointment.Where(x => x.Approved == false);
@@ -685,7 +691,7 @@ namespace WebApp.Controllers
         }
 
         //Returns a view of confirmed appointments
-        [Authorize(Roles ="Administrator,Doctor,SuperUser")]
+        [Authorize(Roles ="Admin,Doctor,SuperUser")]
         public async Task<IActionResult> Confirmed()
         {
             var appointments = _context.Appointment.Where(x => x.Approved == true).Include(x=>x.Doctor);

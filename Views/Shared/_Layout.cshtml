@@ -9,6 +9,7 @@
 <head>
 
     <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Dr Booking</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -21,6 +22,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+    @*<link rel="stylesheet" href="{{asset('WebApp.styles.css')}}" asp-append-version="true" />*@
 </head>
 <body>
     <header>
@@ -42,22 +44,22 @@
                         @{
                             if (SignInManager.IsSignedIn(User))
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="OnlineConsultation">Online Consultation</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="HomeCall">Home Call</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="MyAppointments">My Appointments</a>
-                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="OnlineConsultation">Online Consultation</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="HomeCall">Home Call</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="MyAppointments">My Appointments</a>
+                                                </li>
 
                             }
                             else
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="CheckBooking">Check Appointment</a>
-                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="CheckBooking">Check Appointment</a>
+                                                </li>
                             }
                         }
                         

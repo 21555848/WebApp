@@ -49,7 +49,7 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseWebOptimizer();
 
-app.UseStaticFiles();
+//app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
