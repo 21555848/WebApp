@@ -7,34 +7,35 @@
 }
 @model OnlineMeetingModel
 
-<h3>Add Online Meeting Link</h3>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="SetupMeeting">
+>
+<div class="login">
+    <div class="col-md-8">
+        <form asp-action="SetupMeeting" id="resendEmail">
+            <h2 class="heading">Add Online Meeting Link</h2>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="FullName" class="control-label"></label>
-                <input value="@Model.FullName" asp-for="FullName" readonly class="form-control" />
+                <input value="@Model.FullName" asp-for="FullName" readonly class="form-control login-input" />
                 <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Doctor" class="control-label"></label>
-                <input value="@Model.Doctor" asp-for="Doctor" readonly class="form-control" />
+                <input value="@Model.Doctor" asp-for="Doctor" readonly class="form-control login-input" />
                 <span asp-validation-for="Doctor" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input value="@Model.Date" asp-for="Date" readonly class="form-control" />
+                <input value="@Model.Date" asp-for="Date" readonly class="form-control login-input" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Link" class="control-label"></label>
-                <input asp-for="Link" class="form-control" />
+                <input asp-for="Link" class="form-control login-input" />
                 <span asp-validation-for="Link" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" onsubmit="alert('Done')" value="Confirm Appointment" class="btn btn-primary" />
+                <input type="submit" onsubmit="alert('Done')" value="Confirm Appointment" class="btn btn--primary" />
             </div>
         </form>
     </div>
