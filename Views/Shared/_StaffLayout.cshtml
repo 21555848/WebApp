@@ -21,7 +21,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-grey border-bottom box-shadow mb-3">
+        <nav class="custom-nav navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-grey border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand menu-logo" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Dr Booking<br />internal</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -33,15 +33,7 @@
                         @{
                             if (UserManager.IsInRoleAsync(user, "Doctor").Result)
                             {
-                                        <li class="nav-item">
-                                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
-                                        </li>
-                            }
 
-                            else if (UserManager.IsInRoleAsync(user, "Admin").Result || UserManager.IsInRoleAsync(user, "SuperUser").Result)
                             {
                                         <li class="nav-item">
                                             <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>

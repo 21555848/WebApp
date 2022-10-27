@@ -21,12 +21,20 @@ body {
     margin-bottom: 60px;
     font-family: 'Montserrat', sans-serif;
 }
-
-.menu-logo {
-    color: #ffffff !important;
-    font-weight: 700;
-    font-size: calc(32*0.063rem);
+h1, h2, h3, h4, h5, h6, p, a, li {
+    color: #665ec6;
 }
+    h1, h2, h3, h4, h5, h6 {
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .menu-logo {
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: calc(32*0.063rem);
+    }
 
 .menu-item {
     color: #ffffff !important;
@@ -164,9 +172,10 @@ body {
     margin-bottom: 20px;
 }
 
-#registerForm .btn ,
-#account .btn
-#forgotPassword .btn {
+#registerForm .btn,
+#account .btn,
+#forgotPassword .btn--primary,
+#resendEmail .btn--primary {
     margin-bottom: 20px;
 }
 
@@ -178,3 +187,9 @@ body {
     .form-link:hover {
         color: #665ec6 !important;
     }
+
+.info {
+    font-size: calc(12*0.063rem);
+    padding-top:20px;
+    padding-bottom: 20px;
+}
