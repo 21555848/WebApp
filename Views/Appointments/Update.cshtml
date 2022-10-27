@@ -53,7 +53,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" id="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -86,36 +86,19 @@
     <a asp-action="Index">Back to List</a>
 </div>
 @section Scripts{
-      
-    
-        <script type="text/javascript">
+    <script type="text/javascript">
+                $('#Date').datepicker({
+                    dateFormat: 'mm/dd/yy',
+                    onSelect: function(date) {
+                        var selectedDate = new Date(date).toJSON();
 
-//$(function() {
-//    $('#Start').datepicker({
-//                    dateFormat: 'dd/mm/yyyy',
-//                    onSelect: function(date) {
-//                        var selectedDate = new Date(date);
+                        let dropdown = $("#Time");
+                        dropdown.empty();
 
-//                        $.ajax({
-//                            type: "GET",
-//                            url: "/Appointments/GetDateTimes",
-//                            contentType: "application/json",
-//                            dataType: "json",
-//                            success: function(response) {
-//                                alert("MVC Function Executed");
-//                            },
-//                            failure: function(response) {
-//                                alert("Execution Failed");
-//                            },
-//                            error: function(response) {
-//                                alert(response.responseText);
-//                            }
-//                        });
-//                    }
-//                });
-//});
-                $(function(){
-                    $.ajax({
+                        dropdown.append("<option selected disabled>Choose Time</option>");
+                        dropdown.prop('selectedIndex', 0);
+
+                        $.ajax({
                             type: "GET",
                             url: "/Appointments/GetDateTimes",
                             data:{ "fDate": date},
@@ -134,8 +117,8 @@
                                 alert(response.responseText);
                             }
                         });
-                })
-                        
+                    }
+                });
+
     </script>
 }
-

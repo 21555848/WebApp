@@ -398,6 +398,7 @@ namespace WebApp.Controllers
             }
             var doctors = _context.Doctor.Include(a => a.Appointments).Where(x => x.Active == true).ToList();
             var appointment = await _context.Appointment.FindAsync(id);
+
             if (appointment == null)
             {
                 return NotFound();
@@ -888,8 +889,25 @@ namespace WebApp.Controllers
         [Authorize(Roles = "Admin,SuperUser")]
         public async Task<IActionResult> Unconfirmed()
         {
+            List<Appointment> appointmentsList = new List<Appointment>();
             var appointments = _context.Appointment.Where(x => x.Approved == false);
-            return View(await appointments.ToListAsync());
+            foreach(var app in appointments)
+            {
+                if(app.Date > DateOnly.FromDateTime(DateTime.Now))
+                {
+                    
+                    appointmentsList.Add(app);
+                }
+                else
+                if (app.Date == DateOnly.FromDateTime(DateTime.Now))
+                {
+                    if(app.Time >= TimeOnly.FromDateTime(DateTime.Now))
+                    {
+                        appointmentsList.Add(app);
+                    }
+                }
+            }
+            return View(appointmentsList);
         }
 
         //Returns a view of confirmed appointments
@@ -940,15 +958,5 @@ namespace WebApp.Controllers
         {
             return GetPatientProfile().Id;
         }
-
-        //private async Task<DateOnly> GetAppointmentDate(int id)
-        //{
-        //    return _context.Appointment.FindAsync(id).Result.Date;
-        //}
-
-        //private TimeOnly GetAppointmentTime(int id)
-        //{
-        //    return _context.Appointment.Find(id).Time;
-        //}
     }
 }
