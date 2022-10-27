@@ -12,6 +12,7 @@ builder.Services.AddDefaultIdentity<WebAppUser>(options => options.SignIn.Requir
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<WebAppContext>();
 
+
 builder.Services.AddWebOptimizer();
 
 // Add services to the container.

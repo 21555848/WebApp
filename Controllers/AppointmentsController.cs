@@ -234,6 +234,7 @@ namespace WebApp.Controllers
             ap.Time = TimeOnly.FromDateTime(bm.Time);
             ap.PIN = ranNum;
             ap.Type = AppointmentType.ClinicVisit;
+            ap.Approved = false;
 
             if (ModelState.IsValid)
             {
@@ -483,6 +484,7 @@ namespace WebApp.Controllers
             var appointment = _context.Appointment.FindAsync(id).Result;
             var doctors = _context.Doctor.Include(a => a.Appointments).Where(x => x.Active == true).ToList();
             List<DoctorMaintenanceModel> docList = new List<DoctorMaintenanceModel>();
+            
            
             if (appointment == null)
             {
@@ -492,23 +494,34 @@ namespace WebApp.Controllers
             foreach (var doc in doctors)
             {
                 var user = _userManager.FindByIdAsync(doc.WebAppUserId).Result;
-                if (doc.Appointments.Count > 0)
+                if (doc.Appointments.Count != 0)
                 {
+                    List<Appointment> appointmentsOnDay = new List<Appointment>();
+                    int timeCount = 0;
                     foreach (Appointment app in doc.Appointments)
                     {
                         if (app.Date == appointment.Date)
                         {
-                            if(app.Time != appointment.Time)
-                            {
-                                docList.Add(new DoctorMaintenanceModel
-                                {
-                                    DoctorId = doc.Id,
-                                    FirstName = user.FirstName,
-                                    LastName = user.LastName
-                                });
-                            }
+                            appointmentsOnDay.Add(app);
                         }
-                        else
+                    }
+
+                    foreach(var app in appointmentsOnDay)
+                    {
+                        if(app.Time != appointment.Time)
+                        {
+                            timeCount++;
+                            //docList.Add(new DoctorMaintenanceModel
+                            //{
+                            //    DoctorId = doc.Id,
+                            //    FirstName = user.FirstName,
+                            //    LastName = user.LastName
+                            //});
+                        }
+                    }
+                    if (appointmentsOnDay.Count != 0)
+                    {
+                        if (timeCount + 1 < appointmentsOnDay.Count)
                         {
                             docList.Add(new DoctorMaintenanceModel
                             {
@@ -517,8 +530,18 @@ namespace WebApp.Controllers
                                 LastName = user.LastName
                             });
                         }
-                            
                     }
+
+                    else if(appointmentsOnDay.Count == 0)
+                    {
+                        docList.Add(new DoctorMaintenanceModel
+                        {
+                            DoctorId = doc.Id,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName
+                        });
+                    }
+                        
                 }
 
                 else
@@ -567,10 +590,64 @@ namespace WebApp.Controllers
 
                 ap.DoctorId = bm.DoctorId;
                 ap.Approved = true;
+
+                var doc = _context.Doctor.Include(x=>x.Suite).FirstOrDefault(x => x.Id == ap.DoctorId);
+                var docDetails = _userManager.FindByIdAsync(doc.WebAppUserId).Result;
+                string docName = docDetails.FirstName.Substring(0, 1) + " " + docDetails.LastName;
+                string apType = string.Empty;
+
+                if (ap.Type == AppointmentType.ClinicVisit)
+                    apType = "Clinic Visit";
+                else if (ap.Type == AppointmentType.HomeCall)
+                    apType = "Home Call";
+                else
+                    apType = "Online Consultation";
+
+                EmailConfig email = new EmailConfig();
+                string body = string.Empty;
+               
+
                 try
                 {
                     _context.Update(ap);
                     await _context.SaveChangesAsync();
+                    if (ap.Type == AppointmentType.HomeCall)
+                    {
+                        using (var reader = new StreamReader(Path.GetFullPath("EmailTemplates/HomeAppointmentConfirmed.html")))
+                        {
+                            body = reader.ReadToEnd();
+                        }
+
+                        body = body.Replace("{AppointmentType}", apType);
+                        body = body.Replace("{User}", ap.FirstName);
+                        body = body.Replace("{Date}", ap.Date.ToLongDateString());
+                        body = body.Replace("{Time}", ap.Time.ToString());
+                        body = body.Replace("{FullName}", ap.FirstName + " " + ap.LastName);
+                        body = body.Replace("{StreetAddress}", ap.StreetAddress);
+                        body = body.Replace("{Address2}", ap.Address2);
+                        body = body.Replace("{Suburb}", ap.Suburb);
+                        body = body.Replace("{Province}", ap.Province);
+                        body = body.Replace("{Doctor}", docName);
+                    }
+                    else if(ap.Type == AppointmentType.ClinicVisit)
+                    {
+                        using (var reader = new StreamReader(Path.GetFullPath("EmailTemplates/AppointmentConfirmed.html")))
+                        {
+                            body = reader.ReadToEnd();
+                        }
+
+                        body = body.Replace("{AppointmentType}", "Home Call");
+                        body = body.Replace("{User}", ap.FirstName);
+                        body = body.Replace("{Date}", ap.Date.ToLongDateString());
+                        body = body.Replace("{Time}", ap.Time.ToString());
+                        body = body.Replace("{Suite}", doc.Suite.Name);
+                        body = body.Replace("{Doctor}", docName);
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(SetupMeeting), new { Id = ap.Id });
+                    }
+                    email.SendEmail(ap.EmailAddress, "CONFIRMED: Dr Booking" + apType + "Appointment Details Ref#: " + ap.Id, body);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -591,6 +668,58 @@ namespace WebApp.Controllers
             return View(bm);
         }
 
+        [Authorize(Roles ="Admin,SuperUser")]
+        public IActionResult SetupMeeting(int Id)
+        {
+            var ap = _context.Appointment.Include(x => x.Doctor).FirstOrDefault(x => x.Id == Id);
+            if(ap == null)
+            {
+                return NotFound();
+            }
+            var doc = _userManager.FindByIdAsync(ap.Doctor.WebAppUserId).Result;
+
+            OnlineMeetingModel onlineMeetingModel = new OnlineMeetingModel
+            {
+                Id = ap.Id,
+                FullName = ap.FirstName + " " + ap.LastName,
+                Doctor = doc.FirstName.Substring(0, 1) + " " + doc.LastName,
+                Date = ap.Date.ToLongDateString() + ap.Time
+            };
+            return View(onlineMeetingModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetupMeeting(int Id, OnlineMeetingModel mm)
+        {
+            if(Id == null || mm.Link == null)
+            {
+                return NotFound();
+            }
+
+            var ap = await _context.Appointment.FindAsync(Id);
+
+            ap.Link = mm.Link;
+            _context.Update(ap);
+            await _context.SaveChangesAsync();
+
+            EmailConfig email = new EmailConfig();
+            string body = string.Empty;
+
+            using (var reader = new StreamReader(Path.GetFullPath("EmailTemplates/OnlineConfirmed.html")))
+            {
+                body = reader.ReadToEnd();
+            }
+
+            body = body.Replace("{AppointmentType}", "Online Consultation");
+            body = body.Replace("{User}", ap.FirstName);
+            body = body.Replace("{Date}", ap.Date.ToLongDateString() + " " + ap.Time);
+            body = body.Replace("{Doctor}", mm.Doctor);
+            body = body.Replace("{MeetingLink}", mm.Link);
+            email.SendEmail(ap.EmailAddress, "CONFIRMED: Dr Booking Online Consultation Appointment Details Ref#: " + ap.Id, body);
+            return RedirectToAction(nameof(Unconfirmed));
+        }
+
         //Returns a list of available times on the date selected by the user as a JSon object
         [HttpGet]
         public JsonResult GetDateTimes(DateTime fDate)
@@ -601,8 +730,8 @@ namespace WebApp.Controllers
             //string apQuery = "SELECT * FROM Appointment WHERE Date LIKE " + dateOnly;
             List<Appointment> appointmentsOnDay = _context.Appointment.Where(x => x.Date == dateOnly).ToList();
             // List<Appointment> appointmentsOnDay = _context.Appointment.FromSqlRaw(apQuery).ToList();
-
-            int numDoctors = _context.Doctor.ToList().Count();
+            
+            int numDoctors = _context.Doctor.Where(d=>d.Active).ToList().Count();
 
             List<string> availableTimes = new List<string>();
 

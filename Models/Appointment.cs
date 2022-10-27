@@ -32,6 +32,8 @@ namespace WebApp.Models
         public string? Address2 { get; set; }
         public string? Suburb { get; set; }
         public string? Province { get; set; }
+        [DataType(DataType.Url)]
+        public string? Link { get; set; }
 
     }
 
