@@ -36,6 +36,7 @@ namespace WebApp.Controllers
             return View(await webAppContext.ToListAsync());
         }
 
+        [Authorize(Roles="Default")]
         public IActionResult MyAppointments()
         {
             return View();
@@ -395,7 +396,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-
+            var doctors = _context.Doctor.Include(a => a.Appointments).Where(x => x.Active == true).ToList();
             var appointment = await _context.Appointment.FindAsync(id);
             if (appointment == null)
             {
@@ -407,7 +408,7 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Update));
             }
 
-            ViewData["DoctorId"] = new SelectList(_context.Doctor, "Id", "LastName");
+            ViewData["DoctorId"] = new SelectList(GetAvailableDoctors(doctors,appointment), "DoctorId", "LastName");
             return View(appointment);
 
         }
@@ -491,70 +492,70 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            foreach (var doc in doctors)
-            {
-                var user = _userManager.FindByIdAsync(doc.WebAppUserId).Result;
-                if (doc.Appointments.Count != 0)
-                {
-                    List<Appointment> appointmentsOnDay = new List<Appointment>();
-                    int timeCount = 0;
-                    foreach (Appointment app in doc.Appointments)
-                    {
-                        if (app.Date == appointment.Date)
-                        {
-                            appointmentsOnDay.Add(app);
-                        }
-                    }
+            //foreach (var doc in doctors)
+            //{
+            //    var user = _userManager.FindByIdAsync(doc.WebAppUserId).Result;
+            //    if (doc.Appointments.Count != 0)
+            //    {
+            //        List<Appointment> appointmentsOnDay = new List<Appointment>();
+            //        int timeCount = 0;
+            //        foreach (Appointment app in doc.Appointments)
+            //        {
+            //            if (app.Date == appointment.Date)
+            //            {
+            //                appointmentsOnDay.Add(app);
+            //            }
+            //        }
 
-                    foreach(var app in appointmentsOnDay)
-                    {
-                        if(app.Time != appointment.Time)
-                        {
-                            timeCount++;
-                            //docList.Add(new DoctorMaintenanceModel
-                            //{
-                            //    DoctorId = doc.Id,
-                            //    FirstName = user.FirstName,
-                            //    LastName = user.LastName
-                            //});
-                        }
-                    }
-                    if (appointmentsOnDay.Count != 0)
-                    {
-                        if (timeCount + 1 < appointmentsOnDay.Count)
-                        {
-                            docList.Add(new DoctorMaintenanceModel
-                            {
-                                DoctorId = doc.Id,
-                                FirstName = user.FirstName,
-                                LastName = user.LastName
-                            });
-                        }
-                    }
+            //        foreach (var app in appointmentsOnDay)
+            //        {
+            //            if (app.Time != appointment.Time)
+            //            {
+            //                timeCount++;
+            //                //docList.Add(new DoctorMaintenanceModel
+            //                //{
+            //                //    DoctorId = doc.Id,
+            //                //    FirstName = user.FirstName,
+            //                //    LastName = user.LastName
+            //                //});
+            //            }
+            //        }
+            //        if (appointmentsOnDay.Count != 0)
+            //        {
+            //            if (timeCount + 1 < appointmentsOnDay.Count)
+            //            {
+            //                docList.Add(new DoctorMaintenanceModel
+            //                {
+            //                    DoctorId = doc.Id,
+            //                    FirstName = user.FirstName,
+            //                    LastName = user.LastName
+            //                });
+            //            }
+            //        }
 
-                    else if(appointmentsOnDay.Count == 0)
-                    {
-                        docList.Add(new DoctorMaintenanceModel
-                        {
-                            DoctorId = doc.Id,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName
-                        });
-                    }
-                        
-                }
+            //        else if (appointmentsOnDay.Count == 0)
+            //        {
+            //            docList.Add(new DoctorMaintenanceModel
+            //            {
+            //                DoctorId = doc.Id,
+            //                FirstName = user.FirstName,
+            //                LastName = user.LastName
+            //            });
+            //        }
 
-                else
-                {
-                    docList.Add(new DoctorMaintenanceModel
-                    {
-                        DoctorId = doc.Id,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName
-                    });
-                }
-                
-            }
+            //    }
+
+            //    else
+            //    {
+            //        docList.Add(new DoctorMaintenanceModel
+            //        {
+            //            DoctorId = doc.Id,
+            //            FirstName = user.FirstName,
+            //            LastName = user.LastName
+            //        });
+            //    }
+
+            //}
 
             BookingModel bm = new BookingModel
             {
@@ -570,9 +571,81 @@ namespace WebApp.Controllers
 
 
             ViewData["NotConfirmed"] = "Appointment Not Yet Confirmed.";
-            ViewData["DoctorId"] = new SelectList(docList, "DoctorId", "LastName");
+            ViewData["DoctorId"] = new SelectList(GetAvailableDoctors(doctors, appointment), "DoctorId", "LastName");
+            //ViewData["DoctorId"] = new SelectList(docList, "DoctorId", "LastName");
             return View(bm);
 
+        }
+
+        private List<DoctorMaintenanceModel> GetAvailableDoctors(List<Doctor> doctors, Appointment appointment)
+        {
+            List<DoctorMaintenanceModel> docList = new List<DoctorMaintenanceModel>();
+            foreach (var doc in doctors)
+            {
+                var user = _userManager.FindByIdAsync(doc.WebAppUserId).Result;
+                if (doc.Appointments.Count != 0)
+                {
+                    List<Appointment> appointmentsOnDay = new List<Appointment>();
+                    int timeCount = 0;
+                    foreach (Appointment app in doc.Appointments)
+                    {
+                        if (app.Date == appointment.Date)
+                        {
+                            appointmentsOnDay.Add(app);
+                        }
+                    }
+
+                    foreach (var app in appointmentsOnDay)
+                    {
+                        if (app.Time == appointment.Time)
+                        {
+                            timeCount++;
+                            //docList.Add(new DoctorMaintenanceModel
+                            //{
+                            //    DoctorId = doc.Id,
+                            //    FirstName = user.FirstName,
+                            //    LastName = user.LastName
+                            //});
+                        }
+                    }
+                    if (appointmentsOnDay.Count != 0)
+                    {
+                        if (timeCount != appointmentsOnDay.Count)
+                        {
+                            docList.Add(new DoctorMaintenanceModel
+                            {
+                                DoctorId = doc.Id,
+                                FirstName = user.FirstName,
+                                LastName = user.LastName
+                            });
+                        }
+                    }
+
+                    else if (appointmentsOnDay.Count == 0)
+                    {
+                        docList.Add(new DoctorMaintenanceModel
+                        {
+                            DoctorId = doc.Id,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName
+                        });
+                    }
+
+                }
+
+                else
+                {
+                    docList.Add(new DoctorMaintenanceModel
+                    {
+                        DoctorId = doc.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName
+                    });
+                }
+
+            }
+
+            return docList;
         }
 
         [HttpPost]
