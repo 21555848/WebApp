@@ -5,15 +5,15 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<h1>Delete</h1>
 
-<h3>Are you sure you want to deactivate Dr @Model.LastName ?</h3>
-<div>
-    <h4>Doctor</h4>
-    <hr />
+
+
+<div class="login">
+    <div class="col-md-8">
+   <h2 class="heading">Are you sure you want to deactivate Dr @Model.LastName ?</h2>
     <dl class="row">
         <dt class = "col-sm-2">
-            Full Name
+           <strong> Full Name</strong>
         </dt>
         <dd class = "col-sm-10">
             @Model.FirstName &nbsp;@Model.LastName
@@ -43,4 +43,5 @@
         <input type="submit" value="Deactivate" class="btn btn-danger" /> |
         <a asp-action="Doctors" class="btn btn-warning">Cancel</a>
     </form>
+</div>
 </div>

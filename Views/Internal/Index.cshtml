@@ -47,26 +47,31 @@
 
 <h1>Patient List</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p class="info" >
+    <a asp-action="Create">create new patient</a>
 </p>
-<input type="text" id="searchText" onkeyup="searchTable()" placeholder="Search" />
+<div class="login">
+    <div class="col-md-8">
+        <input type="text" id="searchText" onkeyup="searchTable()" placeholder="Search" class="login-input"/>
+        <p class="info" >
+       <a asp-action="Create">create new patient</a>
+     </p>
 <table class="table" id="myTable">
-        <tr class="header">
+        <tr class="header custom-nav">
             <th scope="col">
-                First Name
+                <strong>First Name</strong>
             </th>
             <th scope="col">
-                Last Name
+                <strong>Last Name</strong>
             </th>
             <th scope="col">
-                Contact #
+               <strong> Contact #</strong>
             </th>
             <th scope="col">
-                Email Address
+               <strong> Email Address</strong>
             </th>
             <th scope="col">
-                Alternate Contact
+               <strong> Alternate Contact</strong>
             </th>
         </tr>
         @foreach(var patient in Model)
@@ -80,6 +85,8 @@
             </tr>
         }
 </table>
+</div>
+</div>
 @section Scripts{
     <script type="text/javascript">
     function searchTable() {

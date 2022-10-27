@@ -21,14 +21,24 @@ body {
     margin-bottom: 60px;
     font-family: 'Montserrat', sans-serif;
 }
-h1, h2, h3, h4, h5, h6, p, a, li {
+
+h1, h2, h3, h4, h5, h6, p, a, li,span,text,label ,tr,th, td,dt,dd {
     color: #665ec6;
 }
+
     h1, h2, h3, h4, h5, h6 {
         text-align: center;
         margin-top: 20px;
         margin-bottom: 20px;
     }
+
+span, label {
+    font-size: calc(12*0.063rem);
+    font-weight: bold;
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
     .menu-logo {
         color: #ffffff !important;
@@ -175,7 +185,8 @@ h1, h2, h3, h4, h5, h6, p, a, li {
 #registerForm .btn,
 #account .btn,
 #forgotPassword .btn--primary,
-#resendEmail .btn--primary {
+#resendEmail .btn--primary,
+#resendEmail .form-group .btn--primary  {
     margin-bottom: 20px;
 }
 

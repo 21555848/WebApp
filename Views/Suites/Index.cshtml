@@ -5,17 +5,19 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<h1>Index</h1>
+
 
 <p>
-    <a asp-action="Add" class="btn btn-primary">Create New</a>
+    <a asp-action="Add" class="btn btn--primary">Create New</a>
 </p>
 
-<table class="table">
-<thead>
+<div class=login">
+    <div class="col-md-8">
+        <table class="table">
+<thead class="custom-nav">
     <tr>
-        <th scope="col">Ref #</th>
-        <th scope="col">Suite Name</th>
+        <th scope="col"><strong>Ref #</strong></th>
+        <th scope="col"><strong> Suite Name</strong></th>
     </tr>
 </thead>
 <tbody>
@@ -32,3 +34,5 @@
         }
 </tbody>
 </table>
+</div>
+</div>

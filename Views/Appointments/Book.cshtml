@@ -18,37 +18,38 @@
 }
 
 <h1>Book Appointment</h1>
-<hr/>
 
-<h3>@ViewBag.AppointmentType</h3>
 
-<div class="row">
-    <div class="col-md-12">
-        <form method="post">
+
+
+<div class="login">
+    <div class="col-md-8">
+        <form method="post" id="resendEmail">
+            <h3 class="heading">@ViewBag.AppointmentType</h3>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="col-md-6">
                      <div class="form-group">
                         <label asp-for="FirstName" class="control-label"></label>
-                        <input asp-for="FirstName" class="form-control" />
+                        <input asp-for="FirstName" class="form-control login-input" />
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="CellNo" class="control-label"></label>
-                        <input asp-for="CellNo" class="form-control" />
+                        <input asp-for="CellNo" class="form-control login-input" />
                         <span asp-validation-for="CellNo" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="EmailAddress" class="control-label"></label>
-                        <input asp-for="EmailAddress" class="form-control" />
+                        <input asp-for="EmailAddress" class="form-control login-input" />
                         <span asp-validation-for="EmailAddress" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="Date" class="control-label">Date</label>
-                        <input asp-for="Date" type="text" value="" id="Date" class="form-control" />
+                        <input asp-for="Date" type="text" value="" id="Date" class="form-control login-input" />
                         <span asp-validation-for="Date" class="text-danger"></span>
                     </div>
            
@@ -57,13 +58,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="LastName" class="control-label"></label>
-                        <input asp-for="LastName" class="form-control" />
+                        <input asp-for="LastName" class="form-control login-input" />
                         <span asp-validation-for="LastName" class="text-danger"></span>
                      </div>  
 
                      <div class="form-group">
                         <label asp-for="AlternateCell" class="control-label"></label>
-                        <input asp-for="AlternateCell" class="form-control" />
+                        <input asp-for="AlternateCell" class="form-control login-input" />
                         <span asp-validation-for="AlternateCell" class="text-danger"></span>
                      </div>
 
@@ -74,7 +75,7 @@
                      <div class="form-group">
                         <label asp-for="Time" required class="control-label"></label>
                         @*<input asp-for="Time" class="form-control" />*@
-                        <select asp-for="Time" id="Time" class="form-control">
+                        <select asp-for="Time" id="Time" class="form-control login-input">
                             <option value="">Select Date First</option>
                             @*<option value="08:00">08:00</option>
                             <option value="09:00">09:00</option>
@@ -168,7 +169,7 @@
                    
 
                 <div class="form-group">
-                <input type="submit" value="Submit Booking" class="btn btn-primary rounded-pill" />
+                <input type="submit" value="Submit Booking" class="btn btn--primary" />
             </div>
             </div>
               @*<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>

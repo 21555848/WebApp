@@ -5,10 +5,9 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<h1>Update</h1>
+<h1>Update  appointment</h1>
 
-<h4>Appointment</h4>
-<hr />
+
 @{
             if (Model.Approved)
             {
@@ -21,51 +20,51 @@
             }
         }
         <br />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Update">
+<div class="login">
+    <div class="col-md-8">
+        <form asp-action="Update" id="resendEmail">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
+                <input asp-for="FirstName" class="form-control login-input" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
+                <input asp-for="LastName" class="form-control login-input" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CellNo" class="control-label"></label>
-                <input asp-for="CellNo" class="form-control" />
+                <input asp-for="CellNo" class="form-control login-input" />
                 <span asp-validation-for="CellNo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AlternateCell" class="control-label"></label>
-                <input asp-for="AlternateCell" class="form-control" />
+                <input asp-for="AlternateCell" class="form-control login-input" />
                 <span asp-validation-for="AlternateCell" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" class="form-control" />
+                <input asp-for="EmailAddress" class="form-control login-input" />
                 <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" id="Date" class="form-control" />
+                <input asp-for="Date" id="Date" class="form-control login-input" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Time" class="control-label"></label>
-                 <select asp-for="Time" id="Time" class="form-control">
+                 <select asp-for="Time" id="Time" class="form-control login-input">
                             <option selected disabled value="@Model.Time">@Model.Time</option>
                         </select>
                 <span asp-validation-for="Time" class="text-danger"></span>
             </div>
             <div class="form-group form-check" style="display:none">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Approved" /> @Html.DisplayNameFor(model => model.Approved)
+                    <input class="form-check-input login-input" asp-for="Approved" /> @Html.DisplayNameFor(model => model.Approved)
                 </label>
             </div>
             <div class="form-group">
@@ -74,9 +73,9 @@
                 <span asp-validation-for="DoctorId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn--primary" />
                 &nbsp;|&nbsp;
-                <a asp-action="Confirm" asp-route-id="@Model.Id">Cancel</a>
+                <a asp-action="Confirm" class-"form-link" asp-route-id="@Model.Id">Cancel</a>
             </div>
         </form>
     </div>
