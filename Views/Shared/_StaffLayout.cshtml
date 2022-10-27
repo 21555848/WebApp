@@ -21,7 +21,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-grey border-bottom box-shadow mb-3">
+        <nav class="custom-nav navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-grey border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Dr Booking</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -34,27 +34,27 @@
                             if (UserManager.IsInRoleAsync(user, "Doctor").Result)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
+                                    <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                                    <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
                                 </li>
                             }
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
+                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Unconfirmed">Unconfirmed Appointments</a>
+                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Unconfirmed">Unconfirmed Appointments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Suites" asp-action="Index">Suites</a>
+                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Suites" asp-action="Index">Suites</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Internal" asp-action="Doctors">Doctors</a>
+                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Internal" asp-action="Doctors">Doctors</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
                         </li>
                         @{
                             if (UserManager.IsInRoleAsync(user, "SuperUser").Result)
