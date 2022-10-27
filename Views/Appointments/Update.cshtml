@@ -9,6 +9,18 @@
 
 <h4>Appointment</h4>
 <hr />
+@{
+            if (Model.Approved)
+            {
+                <h4 class="text-success">Confirmed</h4>
+            }
+
+            else
+            {
+                <h4 class="text-danger">Not Confirmed</h4>
+            }
+        }
+        <br />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Update">
@@ -41,15 +53,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
+                <input asp-for="Date" id="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Time" class="control-label"></label>
-                <input asp-for="Time" class="form-control" />
+                 <select asp-for="Time" id="Time" class="form-control">
+                            <option selected disabled value="@Model.Time">@Model.Time</option>
+                        </select>
                 <span asp-validation-for="Time" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check" style="display:none">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Approved" /> @Html.DisplayNameFor(model => model.Approved)
                 </label>
@@ -61,6 +75,8 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                &nbsp;|&nbsp;
+                <a asp-action="Confirm" asp-route-id="@Model.Id">Cancel</a>
             </div>
         </form>
     </div>
@@ -69,4 +85,40 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+@section Scripts{
+    <script type="text/javascript">
+                $('#Date').datepicker({
+                    dateFormat: 'mm/dd/yy',
+                    onSelect: function(date) {
+                        var selectedDate = new Date(date).toJSON();
 
+                        let dropdown = $("#Time");
+                        dropdown.empty();
+
+                        dropdown.append("<option selected disabled>Choose Time</option>");
+                        dropdown.prop('selectedIndex', 0);
+
+                        $.ajax({
+                            type: "GET",
+                            url: "/Appointments/GetDateTimes",
+                            data:{ "fDate": date},
+                            contentType: "application/json",
+                            dataType: "json",
+                            success: function(response) {
+                                alert("MVC Function Executed");
+                                $.each(response, function(key, time) {
+                                    dropdown.append($("<option></option>").attr("value", time).text(time))
+                                })
+                            },
+                            failure: function(response) {
+                                alert("Execution Failed");
+                            },
+                            error: function(response) {
+                                alert(response.responseText);
+                            }
+                        });
+                    }
+                });
+
+    </script>
+}

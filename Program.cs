@@ -12,6 +12,7 @@ builder.Services.AddDefaultIdentity<WebAppUser>(options => options.SignIn.Requir
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<WebAppContext>();
 
+
 builder.Services.AddWebOptimizer();
 
 // Add services to the container.
@@ -49,7 +50,7 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseWebOptimizer();
 
-app.UseStaticFiles();
+//app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

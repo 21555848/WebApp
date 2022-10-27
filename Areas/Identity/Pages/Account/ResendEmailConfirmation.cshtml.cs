@@ -67,7 +67,11 @@ namespace WebApp.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, "No account exists for this email.");
                 return Page();
             }
-
+            if (user.EmailConfirmed)
+            {
+                ModelState.AddModelError(string.Empty, "This account has been verified. You may reset your password.");
+                return Page();
+            }
             var userId = await _userManager.GetUserIdAsync(user);
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

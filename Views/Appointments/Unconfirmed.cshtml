@@ -1,106 +1,13 @@
-﻿@model IEnumerable<WebApp.Models.Appointment>
+﻿@{
+    @*@model IEnumerable<WebApp.Models.Appointment>
 
 @{
     ViewData["Title"] = "Unconfirmed";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<h1>Unconfirmed</h1>
+<h1>Unconfirmed Appointments</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CellNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AlternateCell)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmailAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Time)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Approved)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PIN)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PatientId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Doctor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CellNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AlternateCell)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Approved)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PIN)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PatientId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Doctor.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-*@
 <table>
 @{
     foreach(var item in Model)
@@ -130,4 +37,134 @@
             </tr>
     }
 }
+</table>*@
+
+}
+
+@using Microsoft.AspNetCore.Identity
+@using WebApp.Areas.Identity.Data
+@using WebApp.Data
+
+@*@model IEnumerable<PatientListViewModel>*@
+    
+@model IEnumerable<Appointment>
+
+@{
+    ViewData["Title"] = "Unconfirmed";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+<style>
+    #searchText {
+  background-image: url('/css/searchicon.png'); /* Add a search icon to input */
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 100%; /* Full-width */
+  font-size: 16px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  margin-bottom: 12px; /* Add some space below the input */
+}
+
+#myTable {
+  border-collapse: collapse; /* Collapse borders */
+  width: 100%; /* Full-width */
+  border: 1px solid #ddd; /* Add a grey border */
+  font-size: 18px; /* Increase font-size */
+}
+
+#myTable th, #myTable td {
+  text-align: left; /* Left-align text */
+  padding: 12px; /* Add padding */
+}
+
+#myTable tr {
+  /* Add a bottom border to all table rows */
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  /* Add a grey background color to the table header and on hover */
+  background-color: #f1f1f1;
+}
+</style>
+
+<h1>Patient List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<input type="text" id="searchText" onkeyup="searchTable()" placeholder="Search" />
+<table class="table" id="myTable">
+        <tr class="header">
+            <th scope="col">
+                Ref #
+            </th>
+            <th scope="col">
+                Full Name
+            </th>
+            <th scope="col">
+                Contact #
+            </th>
+            <th scope="col">
+                Alternate Contact
+            </th>
+            <th scope="col">
+                Email Address
+            </th>
+            <th scope="col">
+                Date & Time
+            </th>
+            <th scope="col">
+                Appointment Type
+            </th>
+            <th></th>
+        </tr>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.FirstName &nbsp; @item.LastName</td>
+                <td>@item.CellNo</td>
+                <td>@item.AlternateCell</td>
+                <td>@item.EmailAddress</td>
+                <td>@item.Date.ToLongDateString()&emsp;@item.Time</td>
+                @if(item.Type == AppointmentType.OnlineConsultation)
+                    {
+                        <td>Online Consultation</td>
+                    }
+                    else if(item.Type == AppointmentType.ClinicVisit){
+                        <td>Clinic Visit</td>
+                    }
+                    else{
+                        <td>Home Call</td>
+                    }
+                <td><a asp-action="Confirm" asp-route-id="@item.Id" class="btn btn-primary">Confirm</a></td>
+            </tr>
+        }
 </table>
+@section Scripts{
+    <script type="text/javascript">
+    function searchTable() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("searchText");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+}
