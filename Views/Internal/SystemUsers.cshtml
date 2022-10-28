@@ -7,13 +7,17 @@
 <h1>System Users</h1>
 
 <nav>
-  <div class="nav custom-nav nav-tabs" id="nav-tab" role="tablist">
+  <div class="nav custom-nav nav-display nav-tabs" id="nav-tab" role="tablist">
+  <div class="col-md-6">
     <button class="nav-link menu-item active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-today" type="button" role="tab" aria-controls="nav-today" aria-selected="true">All Users</button>
     <button class="nav-link menu-item" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Patients</button>
     <button class="nav-link menu-item" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Internal</button>
-    <div>
-       <a asp-action="AddDoctor" class="btn btn--primary">Add Doctor +</a>&nbsp;|&nbsp;
-       <a asp-action="AddAdministrator" class="btn btn--primary">Add Administrator +</a>
+   </div>
+    <div class="col-md-4">
+       <div class="row">
+           <a asp-action="AddDoctor" class="btn btn--primary">Add Doctor +</a>&nbsp;|&nbsp;
+          <a asp-action="AddAdministrator" class="btn btn--primary">Add Administrator +</a>
+       </div>
    </div>
 </div>
 </nav>

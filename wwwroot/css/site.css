@@ -188,6 +188,7 @@ span, label {
     padding-bottom: 20px;
 }
 
+
 .book-input,
 .register-input,
 .login-input,
@@ -221,4 +222,10 @@ span, label {
 
 .icon{
     color:#ffff
+}
+button.active {
+    color: #665ec6 !important;
+}
+.nav-display {
+    display: flex;
 }
