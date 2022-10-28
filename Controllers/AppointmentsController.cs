@@ -46,10 +46,11 @@ namespace WebApp.Controllers
             }
 
             var patient = _context.PatientProfile.Include(x => x.Appointments).FirstOrDefault(a => a.WebAppUserId == user.Id);
+            var patientApp = _context.Appointment.Where(x => x.PatientId == patient.Id);
             List<Appointment> appointments = new List<Appointment>();
 
 
-            foreach(var app in patient.Appointments)
+            foreach(var app in patientApp)
             {
                 if (app.Date > DateOnly.FromDateTime(DateTime.Now))
                 {
@@ -232,7 +233,8 @@ namespace WebApp.Controllers
                             LastName = user.LastName,
                             CellNo = patientProfile.CellNo,
                             AlternateCell = patientProfile.AlternateCell,
-                            EmailAddress = patientProfile.EmailAddress
+                            EmailAddress = patientProfile.EmailAddress,
+                            PatientId = patientProfile.Id
                         };
 
                         return View("Book", model);
@@ -252,7 +254,7 @@ namespace WebApp.Controllers
         //POST: Appointments/Book
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ClinicVisit([Bind("FirstName, LastName, CellNo, AlternateCell, EmailAddress, Date, Time")] BookingModel bm)
+        public async Task<IActionResult> ClinicVisit([Bind("PatientId,FirstName, LastName, CellNo, AlternateCell, EmailAddress, Date, Time")] BookingModel bm)
         {
             Random rand = new Random();
             int ranNum = rand.Next(1000, 9999);
@@ -268,6 +270,7 @@ namespace WebApp.Controllers
             ap.PIN = ranNum;
             ap.Type = AppointmentType.ClinicVisit;
             ap.Approved = false;
+            ap.PatientId = bm.PatientId;
 
             if (ModelState.IsValid)
             {
