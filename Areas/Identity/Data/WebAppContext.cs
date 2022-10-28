@@ -62,11 +62,7 @@ public class WebAppContext : IdentityDbContext<WebAppUser>
             .HasOne(a => a.PatientAddress)
             .WithOne(b => b.PatientProfile)
             .HasForeignKey<PatientAddress>(c => c.PatientProfileId);
-        builder.Entity<PatientProfile>()
-            .HasOne(a => a.CreditCard)
-            .WithOne(b => b.PatientProfile)
-            .HasForeignKey<CreditCard>(c => c.PatientProfileId);
-        builder.Entity<PatientProfile>()
+       builder.Entity<PatientProfile>()
             .HasOne(a => a.MedicalAid)
             .WithOne(b => b.PatientProfile)
             .HasForeignKey<MedicalAid>(c => c.PatientProfileId);
@@ -124,7 +120,6 @@ public class WebAppContext : IdentityDbContext<WebAppUser>
     public DbSet<WebApp.Models.Doctor> Doctor { get; set; }
     public DbSet<WebApp.Models.PatientProfile> PatientProfile { get; set; }
     public DbSet<PatientAddress> PatientAddress { get; set; }
-    public DbSet<CreditCard> CreditCard { get; set; }
     public DbSet<MedicalAid> MedicalAid { get; set; }
     public DbSet<Work> Work { get; set; }
 }

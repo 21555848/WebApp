@@ -259,7 +259,7 @@ namespace WebApp.Controllers
                 email.SendEmail(ap.EmailAddress, "Clinic Visit Appointment Details Ref#: " + ap.Id, body);
                 ViewData["DateTime"] = ap.Date.ToDateTime(ap.Time).ToString("dd MMMM yyyy HH:mm",
                     CultureInfo.CreateSpecificCulture("en-US"));
-                return RedirectToAction("MyAppointment", ap);
+                return View("MyAppointment", ap);
             }
             ViewData["AppointmentType"] = "Clinic Visit";
             return View("Book", bm);

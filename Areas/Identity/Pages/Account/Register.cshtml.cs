@@ -171,12 +171,10 @@ namespace WebApp.Areas.Identity.Pages.Account
                     userData.WebAppUserId = userId;
 
                     var patientAddress = new PatientAddress();
-                    var creditCard = new CreditCard();
                     var workInfo = new Work();
                     var medicalAidInfo = new MedicalAid();
 
                     userData.PatientAddress = patientAddress;
-                    userData.CreditCard = creditCard;
                     userData.Work = workInfo;
                     userData.MedicalAid = medicalAidInfo;
 
