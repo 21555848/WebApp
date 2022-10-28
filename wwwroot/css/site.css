@@ -6,10 +6,19 @@ html {
     background-color: #2c2c37 !important;
 }
 
+@media (max-wdith: 768px) {
+
+    .login {
+        padding: 20px;
+        width: 90%;
+    }
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
   }
+  
 }
 
 html {
