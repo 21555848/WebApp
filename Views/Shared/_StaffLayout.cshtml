@@ -13,18 +13,25 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Dr Booking Internal</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/custom.scss"  asp-append-version="true"/>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.11.0/build/cssnormalize/cssnormalize-min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="custom-nav navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-grey border-bottom box-shadow mb-3">
+        <nav class="custom-nav navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Dr Booking</a>
+                <a class="navbar-brand menu-logo" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Dr Booking</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -35,33 +42,33 @@
                             if (UserManager.IsInRoleAsync(user, "Doctor").Result)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
+                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
                                 </li>
                             }
                         }
                         <li class="nav-item">
-                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
+                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Unconfirmed">Unconfirmed Appointments</a>
+                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="Unconfirmed">Unconfirmed Appointments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Suites" asp-action="Index">Suites</a>
+                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Suites" asp-action="Index">Suites</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Internal" asp-action="Doctors">Doctors</a>
+                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Internal" asp-action="Doctors">Doctors</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
                         </li>
                         @{
                             if (UserManager.IsInRoleAsync(user, "SuperUser").Result)
                             {
                                 <li class="nav-item">
-                                <a class="nav-link menu-link text-dark" asp-controller="Internal" asp-action="SystemUsers">System Users</a>
+                                <a class="nav-link menu-item text-dark" asp-controller="Internal" asp-action="SystemUsers">System Users</a>
                                 </li>
                             }
                         }
