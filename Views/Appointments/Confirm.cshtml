@@ -89,29 +89,28 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<h1>Confirm</h1>
+<h1>Confirm appointment</h1>
 
-<h4>Appointment</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+
+<div class="login">
+    <div class="col-md-8">
         <h4 class="text-danger">@ViewBag.NotConfirmed</h4>
         <form asp-action="Confirm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" readonly class="form-control" />
+                <input asp-for="FirstName" readonly class="form-control login-input" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" readonly class="form-control" />
+                <input asp-for="LastName" readonly class="form-control login-input" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CellNo" class="control-label"></label>
-                <input asp-for="CellNo" readonly class="form-control" />
+                <input asp-for="CellNo" readonly class="form-control login-input" />
                 <span asp-validation-for="CellNo" class="text-danger"></span>
             </div>
             @{
@@ -119,7 +118,7 @@
                 {
                     <div class="form-group">
                         <label asp-for="AlternateCell" class="control-label"></label>
-                        <input asp-for="AlternateCell" readonly class="form-control" />
+                        <input asp-for="AlternateCell" readonly class="form-control login-input" />
                         <span asp-validation-for="AlternateCell" class="text-danger"></span>
                     </div>
                     
@@ -128,28 +127,28 @@
             
             <div class="form-group">
                 <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" readonly class="form-control" />
+                <input asp-for="EmailAddress" readonly class="form-control login-input" />
                 <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" disabled class="form-control" />
+                <input asp-for="Date" disabled class="form-control login-input" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Time" class="control-label"></label>
-                <input asp-for="Time" disabled class="form-control" />
+                <input asp-for="Time" disabled class="form-control login-input" />
                 <span asp-validation-for="Time" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DoctorId" class="control-label">Doctor</label>
-                <select asp-for="DoctorId" required class="form-control" asp-items="ViewBag.DoctorId">
+                <select asp-for="DoctorId" required class="form-control login-input" asp-items="ViewBag.DoctorId">
                     <option value="">Select Doctor</option>
                 </select>
                 <span asp-validation-for="DoctorId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Confirm Appointment" class="btn btn-primary" />
+                <input type="submit" value="Confirm Appointment" class="btn btn--primary" />
                 &nbsp;&nbsp;<a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning">Update Appointment</a>
             </div>
         </form>

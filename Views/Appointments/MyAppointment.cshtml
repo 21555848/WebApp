@@ -7,7 +7,7 @@
 }
 
 <h1>My Appointment</h1>
-<hr />
+
  @{
             if (Model.Approved)
             {
@@ -23,28 +23,32 @@
 <br>
 <p>Alternate Contact No: </p>
 
-<table>
+<div class="login">
+    <div class="col-md-8">
+        <table>
     <tr>
-        <td>Full Name:</td>
+        <td><strong>Full Name:</strong></td>
         <td> @Html.DisplayFor(model => model.FirstName) &nbsp; @Html.DisplayFor(model => model.LastName)</td>
     </tr>
 
     <tr>
-        <td>Contact No:</td>
+        <td><strong>Contact No:</strong></td>
         <td>@Html.DisplayFor(model => model.CellNo)</td>
     </tr>
     @{
         if(Model.AlternateCell != null)
         {
          <tr>
-            <td>Alternate Contact No:</td>
+            <td><strong>Alternate Contact No:</strong></td>
             <td>@Html.DisplayFor(model => model.AlternateCell)</td>
          </tr>
         }        
       }
 
       <tr>
-          <td>Date & Time:</td>
+          <td><strong>Date & Time:</strong></td>
           <td>@ViewBag.DateTime</td>
       </tr>
 </table>
+    </div>
+</div>

@@ -4,17 +4,18 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<h3>Doctors</h3>
 
-<hr />
-<p><a asp-action="AddDoctor">Add Doctor</a></p>
-<table class="table">
+
+<div class="login">
+    <div class="col-md-8">
+        <p><a asp-action="AddDoctor">Add a doctor</a></p>
+        <table class="table">
     <thead>
         <tr>
-            <th scope="col">Full Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Suite</th>
-            <th scope="col">Status</th>
+            <th scope="col"><strong>Full Name</strong></th>
+            <th scope="col"><strong>Email</strong></th>
+            <th scope="col"><strong> Suite</strong></th>
+            <th scope="col"><strong>Status</strong></th>
         </tr>
     </thead>
     <tbody>
@@ -29,12 +30,12 @@
                     if(doc.Active == true)
                     {
                                 <td>Active</td>
-                                <td><a asp-action="DeactivateDoctor" class="btn btn-danger" asp-route-id="@doc.DoctorId">Deactivate</a></td>
+                                <td><a asp-action="DeactivateDoctor" class="btn btn--secondary btn-danger" asp-route-id="@doc.DoctorId">Deactivate</a></td>
                     }
                     else
                     {
                                 <td>Inactive</td>
-                                <td><a asp-action="ActivateDoctor" class="btn btn-success" asp-route-id="@doc.DoctorId">Activate</a></td>
+                                <td><a asp-action="ActivateDoctor" class="btn btn--primary btn-success" asp-route-id="@doc.DoctorId">Activate</a></td>
                     }
                     }
                     
@@ -43,3 +44,6 @@
         }
     </tbody>
 </table>
+
+       </div>
+  </div>

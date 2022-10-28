@@ -5,11 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Appointment</h4>
-    <hr />
+
+<div class="login">
+    <h2 class="heading">Appointment details</h2>
+    
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FirstName)
@@ -86,6 +86,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" class="form-link" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index" class="form-link">Back to List</a>
 </div>
