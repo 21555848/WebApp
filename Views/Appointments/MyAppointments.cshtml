@@ -5,3 +5,33 @@
 }
 
 @model IEnumerable<Appointment>
+
+    <h3>@ViewBag.None</h3>
+<table class="table">
+    @{
+        foreach(var app in Model)
+        {
+            <tr>
+                <td>@app.Date.ToLongDateString() &emsp; @app.Time</td>
+            </tr>
+            <tr>
+                <td>
+                    
+                </td>
+                <td>
+
+                </td>
+            </tr>
+    
+            <tr>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        }
+    }
+    
+</table>

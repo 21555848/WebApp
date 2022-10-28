@@ -13,7 +13,7 @@
         {
 
             <li class="nav-item">
-               <span class="material-symbols-outlined">person </span> <a id="manage" class="nav-link text-dark btn btn--primary" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@user.FirstName</a>
+                <a id="manage" class="nav-link text-dark btn btn--primary" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span style="padding:unset;" class="material-symbols-outlined icon">person </span>@user.FirstName</a>
             </li>
             <li>&nbsp;</li>
             <li class="nav-item">
@@ -26,7 +26,7 @@
         else
         {
             <li class="nav-item">
-                <a id="" class="nav-link text-dark btn btn--primary" asp-area="" asp-page="" title="Manage"><span class="material-symbols-outlined">person </span>  @UserManager.GetUserName(User)</a>
+                <a id="" class="nav-link text-dark btn btn--primary" asp-area="" asp-page="" title="Manage"><span style="padding:unset" class="material-symbols-outlined">person </span>  @UserManager.GetUserName(User)</a>
             </li><li>
                 &nbsp;
             </li>

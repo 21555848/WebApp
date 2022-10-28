@@ -39,7 +39,39 @@ namespace WebApp.Controllers
         [Authorize(Roles="Default")]
         public IActionResult MyAppointments()
         {
-            return View();
+            var user = CurrentUser();
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            var patient = _context.PatientProfile.Include(x => x.Appointments).FirstOrDefault(a => a.WebAppUserId == user.Id);
+            List<Appointment> appointments = new List<Appointment>();
+
+
+            foreach(var app in patient.Appointments)
+            {
+                if (app.Date > DateOnly.FromDateTime(DateTime.Now))
+                {
+
+                    appointments.Add(app);
+                }
+
+                if (app.Date == DateOnly.FromDateTime(DateTime.Now))
+                {
+                    if (app.Time >= TimeOnly.FromDateTime(DateTime.Now))
+                    {
+                        appointments.Add(app);
+                    }
+                }
+            }
+            if(appointments.Count == 0)
+            {
+                ViewData["None"] = "You do not have any upcoming appointment";
+                return View(appointments);
+            }
+            ViewData["None"] = "";
+            return View(appointments);
         }
 
         // GET: Appointments/Details/5

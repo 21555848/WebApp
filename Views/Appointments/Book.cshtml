@@ -22,60 +22,60 @@
 
 
 
-<div class="login">
+<div class="book">
     <div class="col-md-8">
         <form method="post" id="resendEmail">
             <h3 class="heading">@ViewBag.AppointmentType</h3>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="col-md-6">
-                     <div class="form-group">
-                        <label asp-for="FirstName" class="control-label"></label>
+                     <div class="form-floating">
                         <input asp-for="FirstName" class="form-control login-input" />
+                        <label asp-for="FirstName"></label>
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label asp-for="CellNo" class="control-label"></label>
+                    <div class="form-floating">
                         <input asp-for="CellNo" class="form-control login-input" />
+                         <label asp-for="CellNo"></label>
                         <span asp-validation-for="CellNo" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label asp-for="EmailAddress" class="control-label"></label>
-                        <input asp-for="EmailAddress" class="form-control login-input" />
+                    <div class="form-floating">
+                        <input asp-for="EmailAddress" class="form-control book-input" />
+                        <label asp-for="EmailAddress"></label>
                         <span asp-validation-for="EmailAddress" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label asp-for="Date" class="control-label">Date</label>
-                        <input asp-for="Date" type="text" value="" id="Date" class="form-control login-input" />
+                    <div class="form-floating">
+                        <input asp-for="Date" type="text" value="" id="Date" class="form-control book-input" />
+                         <label asp-for="Date">Date</label>
                         <span asp-validation-for="Date" class="text-danger"></span>
                     </div>
            
                 </div>
 
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="LastName" class="control-label"></label>
-                        <input asp-for="LastName" class="form-control login-input" />
+                    <div class="form-floating">
+                        <input asp-for="LastName" class="form-control book-input" />
+                        <label asp-for="LastName"></label>
                         <span asp-validation-for="LastName" class="text-danger"></span>
                      </div>  
 
-                     <div class="form-group">
-                        <label asp-for="AlternateCell" class="control-label"></label>
-                        <input asp-for="AlternateCell" class="form-control login-input" />
+                     <div class="form-floating">
+                        <input asp-for="AlternateCell" class="form-control book-input" />
+                        <label asp-for="AlternateCell"></label>
                         <span asp-validation-for="AlternateCell" class="text-danger"></span>
                      </div>
 
-                     <div class="form-group">
+                     <div class="form-floating">
                         <span class="text-danger"><br /><br /><br /></span>
                      </div>
 
-                     <div class="form-group">
-                        <label asp-for="Time" required class="control-label"></label>
+                     <div class="form-floating">
+                        
                         @*<input asp-for="Time" class="form-control" />*@
-                        <select asp-for="Time" id="Time" class="form-control login-input">
+                        <select asp-for="Time" id="Time" class="form-control login-input ">
                             <option value="">Select Date First</option>
                             @*<option value="08:00">08:00</option>
                             <option value="09:00">09:00</option>
@@ -87,6 +87,7 @@
                             <option value="15:00">15:00</option>
                             <option value="16:00">16:00</option>*@
                         </select>
+                        <label asp-for="Time" required></label>
                         <span asp-validation-for="Time" class="text-danger"></span>
                      </div>
 
@@ -134,31 +135,31 @@
                                                     </div>
                                                     <div id="alternateAddress">
                                                         <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label asp-for="altStreetAddress" class="control-label"></label>
-                                                                <input asp-for="altStreetAddress"  class="form-control" />
+                                                            <div class="form-floating">
+                                                                <input asp-for="altStreetAddress"  class="form-control book-input" />
+                                                                <label asp-for="altStreetAddress"></label>
                                                                 <span asp-validation-for="altStreetAddress" class="text-danger"></span>
                                                              </div>  
-                                                             <div class="form-group">
-                                                                <label asp-for="altAddress2" class="control-label"></label>
-                                                                <input asp-for="altAddress2" class="form-control" />
+                                                             <div class="form-floating">
+                                                                <input asp-for="altAddress2" class="form-control book-input" />
+                                                                <label asp-for="altAddress2" ></label>
                                                                 <span asp-validation-for="altAddress2" class="text-danger"></span>
                                                              </div> 
-                                                             <div class="form-group">
-                                                                <label asp-for="altSuburb" class="control-label"></label>
-                                                                <input asp-for="altSuburb"  class="form-control" />
+                                                             <div class="form-floating">
+                                                                <input asp-for="altSuburb"  class="form-control book-input" />
+                                                                <label asp-for="altSuburb"></label>
                                                                 <span asp-validation-for="altSuburb" class="text-danger"></span>
                                                              </div> 
-                                                             <div class="form-group">
-                                                                <label asp-for="altProvince" class="control-label"></label>
-                                                                <input asp-for="altProvince"  class="form-control" />
+                                                             <div class="form-floating">
+                                                                <input asp-for="altProvince"  class="form-control book-input" />
+                                                                <label asp-for="altProvince" ></label>
                                                                 <span asp-validation-for="altProvince" class="text-danger"></span>
                                                              </div> 
                                                         </div>
                                                         </div>
                                                         <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label asp-for="UseDifferentAddress" class="control-label"></label>
+                                                    <div class="form-group" style="margin-bottom:15px">
+                                                    <label asp-for="UseDifferentAddress" >Use a different address</label>
                                                         <input asp-for="UseDifferentAddress" id="diffAddress" onchange="showAddress()" class="form-check-input" />
                                                         <span asp-validation-for="UseDifferentAddress" class="text-danger"></span>
                                                     </div>
@@ -167,9 +168,11 @@
                     }
                 }
                    
-
-                <div class="form-group">
-                <input type="submit" value="Submit Booking" class="btn btn--primary" />
+                <div class="form-floating">
+                <input type="submit" value="Submit Booking" class="w-100 btn btn--primary" />
+            </div>
+            <div class="form-floating align-content-end" style="margin-bottom:20px">
+                <a asp-action="Index" asp-controller="Home" class="w-100 btn btn-warning">Cancel</a>
             </div>
             </div>
               @*<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>

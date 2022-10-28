@@ -28,7 +28,7 @@ h1, h2, h3, h4, h5, h6, p, a, li,span,text,label ,tr,th, td,dt,dd {
     color: #665ec6;
 }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1, h2, h3, h4, h5, h6, p {
         text-align: center;
         margin-top: 20px;
         margin-bottom: 20px;
@@ -157,6 +157,7 @@ span, label {
     display: flex;
 }
 
+
 .register,
 .login,
 .forgot{
@@ -164,6 +165,16 @@ span, label {
     justify-content: center;
     background-color: #ffffff;
     width: 50%;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.book {
+    display: flex;
+    justify-content: center;
+    background-color: #ffffff;
+    width: 75%;
     margin: 0 auto;
     border-radius: 15px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
@@ -177,6 +188,7 @@ span, label {
     padding-bottom: 20px;
 }
 
+.book-input,
 .register-input,
 .login-input,
 .forgot-input {
@@ -205,4 +217,8 @@ span, label {
     font-size: calc(12*0.063rem);
     padding-top:20px;
     padding-bottom: 20px;
+}
+
+.icon{
+    color:#ffff
 }
