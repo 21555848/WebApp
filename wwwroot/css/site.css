@@ -229,3 +229,9 @@ button.active {
 .nav-display {
     display: flex;
 }
+
+.col-md-4 .row .btn--primary {
+    display: inline-block !important;
+    width: 100%;
+    max-width: 200px;
+}
