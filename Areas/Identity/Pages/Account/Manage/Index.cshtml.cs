@@ -74,18 +74,13 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
             public string Occupation { get; set; }
             public string WorkPhone { get; set; }
             //Credit Card Information
-            //public CreditCard CreditCard { get; set; }
-            public string CardHolder { get; set; }
-            [DataType(DataType.CreditCard)]
-            public string CreditCardNo { get; set; }
-           //[DisplayFormat(DataFormatString ="{0: MM/yyyy}")]
-            [DataType(DataType.Date)]
-            public DateTime? ExpiryDate { get; set; }
-            public int? CVV { get; set; }
+           
             //Medical Aid information
             //public MedicalAid MedicalAid { get; set; }
             public string MedicalAidName { get; set; }
             public string MedicalAidNumber { get; set; }
+            public DateOnly DoB { get; set; }
+            public Gender Gender { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -104,7 +99,6 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
             var profile = _context.PatientProfile.FirstOrDefault(x => x.WebAppUserId == userId);
 
             var patientAddress = _context.PatientAddress.FirstOrDefault(x => x.PatientProfileId == profile.Id);
-            var creditCardInfo = _context.CreditCard.FirstOrDefault(x => x.PatientProfileId == profile.Id);
             var workInfo = _context.Work.FirstOrDefault(x => x.PatientProfileId == profile.Id);
             var medicalAidInfo = _context.MedicalAid.FirstOrDefault(x => x.PatientProfileId == profile.Id);
 
@@ -165,10 +159,6 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
                 Company = workInfo.Company,
                 Occupation = workInfo.Occupation,
                 WorkPhone = workInfo.WorkPhone,
-                CardHolder = creditCardInfo.CardHolder,
-                CreditCardNo = creditCardInfo.CreditCardNo,
-                ExpiryDate = creditCardInfo.ExpiryDate,
-                CVV = creditCardInfo.CVV,
                 MedicalAidName = medicalAidInfo.Name,
                 MedicalAidNumber = medicalAidInfo.Number
             };
@@ -200,7 +190,6 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
             var profile = _context.PatientProfile.FirstOrDefault(x => x.WebAppUserId == userId);
 
             var patientAddress = _context.PatientAddress.FirstOrDefault(x => x.PatientProfileId == profile.Id);
-            var creditCardInfo = _context.CreditCard.FirstOrDefault(x => x.PatientProfileId == profile.Id);
             var medicalAidInfo = _context.MedicalAid.FirstOrDefault(x => x.PatientProfileId == profile.Id);
             var workInfo = _context.Work.FirstOrDefault(x => x.PatientProfileId == profile.Id);
 
@@ -235,17 +224,12 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
             workInfo.Company = Input.Company;
             workInfo.Occupation = Input.Occupation;
             workInfo.WorkPhone = Input.WorkPhone;
-            creditCardInfo.CardHolder = Input.CardHolder;
-            creditCardInfo.CreditCardNo = Input.CreditCardNo;
-            creditCardInfo.ExpiryDate = Input.ExpiryDate;
-            creditCardInfo.CVV = Input.CVV;
             medicalAidInfo.Name = Input.MedicalAidName;
             medicalAidInfo.Number = Input.MedicalAidNumber;
 
             _context.Update(profile);
             _context.Update(patientAddress);
             _context.Update(workInfo);
-            _context.Update(creditCardInfo);
             _context.Update(medicalAidInfo);
             await _context.SaveChangesAsync();
 
