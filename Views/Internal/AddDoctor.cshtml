@@ -13,46 +13,45 @@
 <h2 class="heading">Create doctor</h2>
         <form asp-action="AddDoctor" id="resendEmail">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label">First Name</label>
+            <div class="form-floating">
                 <input asp-for="FirstName" class="form-control login-input" />
+                <label asp-for="FirstName" class="control-label">First Name</label>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label">Last Name</label>
+            <div class="form-floating">
                 <input asp-for="LastName" class="form-control login-input" />
+                <label asp-for="LastName" class="control-label">Last Name</label>
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmailAddress" class="control-label">Email Address</label>
+            <div class="form-floating">
                 <input asp-for="EmailAddress" class="form-control login-input" />
+                <label asp-for="EmailAddress" class="control-label">Email Address</label>
                 <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="SuiteId" class="control-label">Suite</label>
+            <div class="form-floating">
                 <select asp-for="SuiteId" class ="form-control login-input" asp-items="ViewBag.SuiteId">
                     <option value="">Select Suite</option>
                 </select>
+                <label asp-for="SuiteId" class="control-label">Suite</label>
             </div>
             @{
                 if(ViewBag.Count == 0)
                 {   
-                    <span>
+                    <span><div class="form-group form-control" style="margin-bottom:30px">
                     <label class="text-danger">Please create a suite before a doctor can be added to the system</label>
-                    <a asp-controller="Suites" asp-action="AddForDoc" asp-route-returnUrl="@Context.Request.Path" class="btn btn--secondary" >Add Suite</a></span>
+                    <a asp-controller="Suites" asp-action="AddForDoc" asp-route-returnUrl="@Context.Request.Path"  class="btn btn-secondary" >Add Suite</a>
+                    </div>
+                    </span>
 
                 }
             }
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn--primary" /> | 
+                <input type="submit" value="Create" class="w-100 btn btn--primary" /> 
                 <a asp-action="Doctors" class="btn btn-secondary btn-danger">Cancel</a>
             </div>
         </form>
+        <br />
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

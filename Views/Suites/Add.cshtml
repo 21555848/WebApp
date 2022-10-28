@@ -5,29 +5,29 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<h1>Suite Maintenance: Create</h1>
+<h1>Suite Maintenance: Add</h1>
 
 <h4>Suite</h4>
 <hr />
 <div class="login">
     <div class="col-md-8">
-        <form method="post" i="resendEmail">
+        <form method="post" id="resendEmail">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="SuiteName" class="control-label"></label>
+            <div class="form-floating" style="margin-top:20px">
                 <input asp-for="SuiteName" class="form-control login-input" />
+                <label asp-for="SuiteName" class="control-label"></label>
                 <span asp-validation-for="SuiteName" class="text-danger"></span>
             </div>
             
+            <div class="form-group" style="margin:15px">
+                <input type="submit"  value="Add" class=" w-100 btn btn--primary" />
+            </div>
             <div class="form-group">
-                <input type="submit"  value="Add" class="btn btn-primary" />
+                <a asp-action="Index" class="w-100 btn btn-secondary">Cancel</a>
             </div>
         </form>
+        <br />
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

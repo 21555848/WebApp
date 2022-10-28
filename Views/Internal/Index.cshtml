@@ -65,6 +65,7 @@
             <th scope="col">
                 Alternate Contact
             </th>
+            <th></th>
         </tr>
         @foreach(var patient in Model)
         {
@@ -74,6 +75,7 @@
                 <td>@patient.CellNo</td>
                 <td>@patient.EmailAddress</td>
                 <td>@patient.AlternateCell</td>
+                <td><a class="w-100 btn btn--primary" asp-action="">Details</a></td>
             </tr>
         }
 </table>

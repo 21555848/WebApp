@@ -50,22 +50,22 @@ namespace WebApp.Controllers
             List<Appointment> appointments = new List<Appointment>();
 
 
-            foreach(var app in patientApp)
-            {
-                if (app.Date > DateOnly.FromDateTime(DateTime.Now))
-                {
+            //foreach(var app in patientApp)
+            //{
+            //    if (app.Date > DateOnly.FromDateTime(DateTime.Now))
+            //    {
 
-                    appointments.Add(app);
-                }
+            //        appointments.Add(app);
+            //    }
 
-                if (app.Date == DateOnly.FromDateTime(DateTime.Now))
-                {
-                    if (app.Time >= TimeOnly.FromDateTime(DateTime.Now))
-                    {
-                        appointments.Add(app);
-                    }
-                }
-            }
+            //    if (app.Date == DateOnly.FromDateTime(DateTime.Now))
+            //    {
+            //        if (app.Time >= TimeOnly.FromDateTime(DateTime.Now))
+            //        {
+            //            appointments.Add(app);
+            //        }
+            //    }
+            //}
             if(appointments.Count == 0)
             {
                 ViewData["None"] = "You do not have any upcoming appointment";
@@ -951,6 +951,8 @@ namespace WebApp.Controllers
         {
             var appointments = _context.Appointment.Where(x => x.Approved == true).Include(x=>x.Doctor);
             List<ConfirmedAppointmentViewModel> appointmentVM = new List<ConfirmedAppointmentViewModel>();
+            List<ConfirmedAppointmentViewModel> doctorAppointments = new List<ConfirmedAppointmentViewModel>();
+            var user = CurrentUser();
             foreach(var appointment in appointments)
             {
                 appointmentVM.Add(new ConfirmedAppointmentViewModel
@@ -966,6 +968,17 @@ namespace WebApp.Controllers
                     Doctor = _userManager.FindByIdAsync(appointment.Doctor.WebAppUserId).Result,
                     Type = appointment.Type
                 });
+            }
+            if (_userManager.IsInRoleAsync(user, "Doctor").Result)
+            {
+                foreach(var app in appointmentVM)
+                {
+                    if(user == app.Doctor)
+                    {
+                        doctorAppointments.Add(app);
+                    }
+                }
+                return View(doctorAppointments);
             }
             return View(appointmentVM);
         }

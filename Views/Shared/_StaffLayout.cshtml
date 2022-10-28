@@ -44,12 +44,13 @@
                                 <li class="nav-item">
                                     <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
-                                </li>
+                                //<li class="nav-item">
+                                //    <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                                //</li>
                             }
-                        }
-                        <li class="nav-item">
+                        else if(UserManager.IsInRoleAsync(user, "Admin").Result)
+                        {
+                            <li class="nav-item">
                             <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Appointments" asp-action="Confirmed">Confirmed Appointments</a>
                         </li>
                         <li class="nav-item">
@@ -62,16 +63,28 @@
                             <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Internal" asp-action="Doctors">Doctors</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Internal" asp-action="Index">Patients</a>
                         </li>
-                        @{
-                            if (UserManager.IsInRoleAsync(user, "SuperUser").Result)
+                            
+                        }
+                        else if (UserManager.IsInRoleAsync(user, "SuperUser").Result)
                             {
                                 <li class="nav-item">
                                 <a class="nav-link menu-item text-dark" asp-controller="Internal" asp-action="SystemUsers">System Users</a>
                                 </li>
+                                <li class="nav-item">
+                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Suites" asp-action="Index">Suites</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Internal" asp-action="Doctors">Doctors</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                        </li>
+                                
                             }
                         }
+                        
 
                     </ul>
                     <partial name="_LoginPartial" />

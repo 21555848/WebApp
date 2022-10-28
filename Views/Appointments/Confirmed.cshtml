@@ -3,8 +3,8 @@
     ViewData["Title"] = "Confirmed";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
-
-
+<h1>Confirmed Appointments</h1>
+<br />
 <nav>
   <div class="nav custom-nav nav-tabs" id="nav-tab" role="tablist">
     <button class="nav-link menu-item active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-today" type="button" role="tab" aria-controls="nav-today" aria-selected="true">Today</button>
@@ -81,6 +81,7 @@
                   <th scope="col">Time</th>
                   <th scope="col">Doctor</th>
                   <th scope="col">Type</th>
+                  <th scope="col"></th>
               </tr>
           </thead>
 
@@ -114,6 +115,9 @@
                                         <td>Clinic Visit</td>
                                     }
                                 }
+                                <td>
+                                <a class="btn btn--primary">Details</a>
+                                </td>
                                 </tr>
                         }
                         

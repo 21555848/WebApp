@@ -129,11 +129,14 @@ namespace WebApp.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    if (_userManager.IsInRoleAsync(user, "Doctor").Result || _userManager.IsInRoleAsync(user,"Admin").Result
-                        || _userManager.IsInRoleAsync(user,"SuperUser").Result)
+                    if (_userManager.IsInRoleAsync(user, "Doctor").Result || _userManager.IsInRoleAsync(user,"Admin").Result)
                     {
                         _logger.LogInformation("User logged in.");
                         return RedirectToAction("Confirmed", "Appointments");
+                    } else if(_userManager.IsInRoleAsync(user, "SuperUser").Result)
+                    {
+                        _logger.LogInformation("User logged in.");
+                        return RedirectToAction("SystemUsers", "Internal");
                     }
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
