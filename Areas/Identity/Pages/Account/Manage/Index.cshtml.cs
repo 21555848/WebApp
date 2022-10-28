@@ -226,6 +226,8 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
             workInfo.WorkPhone = Input.WorkPhone;
             medicalAidInfo.Name = Input.MedicalAidName;
             medicalAidInfo.Number = Input.MedicalAidNumber;
+            profile.DoB = Input.DoB.ToDateTime(new TimeOnly(0,0));
+            profile.Gender = Input.Gender;
 
             _context.Update(profile);
             _context.Update(patientAddress);

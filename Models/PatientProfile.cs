@@ -11,6 +11,7 @@ namespace WebApp.Models
         public string CellNo { get; set; }
         public string? AlternateCell { get; set; }
         public string EmailAddress { get; set; }
+        public string? IdNum { get; set; }
         [DataType(DataType.Date)]
         public DateTime? DoB { get; set; }
         public Gender? Gender { get; set; }

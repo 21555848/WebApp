@@ -14,5 +14,6 @@ public class WebAppUser : IdentityUser
     public string? LastName { get; set; }
     public PatientProfile? PatientProfile { get; set; }
     public Doctor? Doctor { get; set; }
+    public DateTime? LastLogon { get; set; }
 }
 
