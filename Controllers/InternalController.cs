@@ -13,6 +13,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [Authorize(Roles ="Doctor, Admin, SuperUser")]
     public class InternalController : Controller
     {
         private readonly WebAppContext _context;

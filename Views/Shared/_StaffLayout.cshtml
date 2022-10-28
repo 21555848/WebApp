@@ -5,7 +5,8 @@
 @inject SignInManager<WebAppUser> SignInManager
 @inject UserManager<WebAppUser> UserManager
 @{
-    var user = UserManager.FindByNameAsync(UserManager.GetUserName(User)).Result;
+        var user = UserManager.FindByNameAsync(UserManager.GetUserName(User)).Result;
+
 }
 
 <!DOCTYPE html>
@@ -60,7 +61,7 @@
                             if (UserManager.IsInRoleAsync(user, "SuperUser").Result)
                             {
                                 <li class="nav-item">
-                                <a class="nav-link menu-item text-dark" asp-controller="Internal" asp-action="SystemUsers">System Users</a>
+                                <a class="nav-link menu-link text-dark" asp-controller="Internal" asp-action="SystemUsers">System Users</a>
                                 </li>
                             }
                         }
